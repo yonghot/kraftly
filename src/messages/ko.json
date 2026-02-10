@@ -1,0 +1,117 @@
+{
+  "common": {
+    "appName": "크래프리",
+    "tagline": "K-디자인 AI 주얼리 플랫폼",
+    "login": "로그인",
+    "signup": "회원가입",
+    "logout": "로그아웃",
+    "home": "홈",
+    "studio": "AI 스튜디오",
+    "gallery": "갤러리",
+    "myDesigns": "내 디자인",
+    "language": "언어",
+    "loading": "로딩 중...",
+    "error": "문제가 발생했습니다",
+    "tryAgain": "다시 시도"
+  },
+  "landing": {
+    "heroTitle": "AI로 한국적 주얼리를 디자인하세요",
+    "heroSubtitle": "독특한 K-디자인 주얼리를 만들고, 한국 장인과 연결하세요",
+    "heroCta": "디자인 시작하기",
+    "heroNote": "계정 없이도 무료로 체험할 수 있어요.",
+    "howItWorks": "이용 방법",
+    "step1Title": "K-디자인 스타일 선택",
+    "step1Desc": "6가지 한국적 미학 카테고리에서 선택",
+    "step2Title": "AI가 디자인 생성",
+    "step2Desc": "AI가 4가지 독특한 주얼리 컨셉을 생성",
+    "step3Title": "한국 장인이 제작",
+    "step3Desc": "숙련된 장인이 디자인을 현실로 만듭니다",
+    "categoriesTitle": "K-디자인 카테고리",
+    "tryStyle": "이 스타일 체험하기",
+    "galleryPreview": "다른 사람들의 디자인을 감상하세요",
+    "viewAll": "전체 디자인 보기",
+    "forArtisans": "한국 주얼리 장인이신가요?",
+    "artisanBenefits": "글로벌 고객과 연결하고, 합리적인 수수료로 활동하며, 자동 번역으로 소통하세요.",
+    "joinArtisan": "장인으로 참여하기"
+  },
+  "studio": {
+    "title": "K-디자인 AI 스튜디오",
+    "step1": "K-디자인 스타일 선택",
+    "step2": "디자인 상세",
+    "step3": "생성된 디자인",
+    "jewelryType": "주얼리 종류",
+    "material": "소재",
+    "additionalDetails": "추가 설명",
+    "additionalPlaceholder": "원하는 세부 사항을 입력하세요... (최대 200자)",
+    "generate": "K-디자인 생성하기",
+    "generating": "AI가 K-디자인을 만들고 있어요...",
+    "select": "선택",
+    "selected": "선택됨",
+    "regenerate": "다시 생성",
+    "shareToGallery": "갤러리에 공유",
+    "findArtisan": "장인 찾기",
+    "remaining": "오늘 {count}회 생성 가능",
+    "loginForMore": "더 많은 생성을 위해 로그인하세요"
+  },
+  "gallery": {
+    "title": "디자인 갤러리",
+    "sortLatest": "최신순",
+    "sortPopular": "인기순",
+    "allCategories": "전체 카테고리",
+    "allTypes": "전체 종류",
+    "noDesigns": "아직 디자인이 없습니다. 첫 번째 디자인을 만들어보세요!",
+    "likes": "좋아요 {count}개"
+  },
+  "design": {
+    "category": "카테고리",
+    "type": "주얼리 종류",
+    "material": "소재",
+    "createdBy": "디자이너",
+    "createdAt": "생성일",
+    "share": "공유",
+    "like": "좋아요",
+    "orderNow": "이 디자인 주문하기"
+  },
+  "auth": {
+    "loginTitle": "다시 오신 것을 환영합니다",
+    "signupTitle": "계정 만들기",
+    "email": "이메일",
+    "password": "비밀번호",
+    "confirmPassword": "비밀번호 확인",
+    "loginButton": "로그인",
+    "signupButton": "회원가입",
+    "forgotPassword": "비밀번호를 잊으셨나요?",
+    "noAccount": "계정이 없으신가요?",
+    "hasAccount": "이미 계정이 있으신가요?",
+    "orContinueWith": "또는",
+    "google": "Google"
+  },
+  "my": {
+    "designsTitle": "내 디자인",
+    "noDesigns": "아직 만든 디자인이 없습니다.",
+    "startDesigning": "디자인 시작하기",
+    "public": "공개",
+    "private": "비공개"
+  },
+  "footer": {
+    "about": "크래프리 소개",
+    "forArtisans": "장인 안내",
+    "gallery": "갤러리",
+    "faq": "자주 묻는 질문",
+    "copyright": "© OVVN / LILYFE"
+  },
+  "jewelryTypes": {
+    "ring": "반지",
+    "necklace": "목걸이",
+    "earring": "귀걸이",
+    "bracelet": "팔찌",
+    "brooch": "브로치"
+  },
+  "materials": {
+    "silver": "스털링 실버",
+    "gold_14k": "14K 골드",
+    "gold_18k": "18K 골드",
+    "rose_gold": "로즈 골드",
+    "platinum": "플래티넘"
+  }
+}

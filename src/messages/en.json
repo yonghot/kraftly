@@ -1,0 +1,117 @@
+{
+  "common": {
+    "appName": "Kraftly",
+    "tagline": "K-Design AI Jewelry Platform",
+    "login": "Log In",
+    "signup": "Sign Up",
+    "logout": "Log Out",
+    "home": "Home",
+    "studio": "AI Studio",
+    "gallery": "Gallery",
+    "myDesigns": "My Designs",
+    "language": "Language",
+    "loading": "Loading...",
+    "error": "Something went wrong",
+    "tryAgain": "Try Again"
+  },
+  "landing": {
+    "heroTitle": "Design Korean Jewelry with AI",
+    "heroSubtitle": "Create unique K-Design pieces and connect with master Korean artisans",
+    "heroCta": "Start Designing",
+    "heroNote": "No account needed. Free to try.",
+    "howItWorks": "How It Works",
+    "step1Title": "Choose a K-Design Style",
+    "step1Desc": "Pick from 6 Korean aesthetic categories",
+    "step2Title": "AI Generates Your Design",
+    "step2Desc": "Our AI creates 4 unique jewelry concepts",
+    "step3Title": "Korean Artisan Crafts It",
+    "step3Desc": "Master craftspeople bring your design to life",
+    "categoriesTitle": "K-Design Categories",
+    "tryStyle": "Try This Style",
+    "galleryPreview": "See what others are designing",
+    "viewAll": "View All Designs",
+    "forArtisans": "Are you a Korean jewelry artisan?",
+    "artisanBenefits": "Connect with global customers, earn fair commissions, and communicate effortlessly with auto-translation.",
+    "joinArtisan": "Join as Artisan"
+  },
+  "studio": {
+    "title": "K-Design AI Studio",
+    "step1": "Choose Your K-Design Style",
+    "step2": "Design Details",
+    "step3": "Your Designs",
+    "jewelryType": "Jewelry Type",
+    "material": "Material",
+    "additionalDetails": "Additional Details",
+    "additionalPlaceholder": "Describe any specific details you'd like... (max 200 chars)",
+    "generate": "Generate K-Design",
+    "generating": "AI is crafting your K-Design...",
+    "select": "Select",
+    "selected": "Selected",
+    "regenerate": "Regenerate",
+    "shareToGallery": "Share to Gallery",
+    "findArtisan": "Find Artisan",
+    "remaining": "{count} generations remaining today",
+    "loginForMore": "Log in for more generations"
+  },
+  "gallery": {
+    "title": "Design Gallery",
+    "sortLatest": "Latest",
+    "sortPopular": "Popular",
+    "allCategories": "All Categories",
+    "allTypes": "All Types",
+    "noDesigns": "No designs yet. Be the first to create one!",
+    "likes": "{count} likes"
+  },
+  "design": {
+    "category": "Category",
+    "type": "Jewelry Type",
+    "material": "Material",
+    "createdBy": "Created by",
+    "createdAt": "Created on",
+    "share": "Share",
+    "like": "Like",
+    "orderNow": "Order This Design"
+  },
+  "auth": {
+    "loginTitle": "Welcome Back",
+    "signupTitle": "Create Account",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "loginButton": "Log In",
+    "signupButton": "Sign Up",
+    "forgotPassword": "Forgot password?",
+    "noAccount": "Don't have an account?",
+    "hasAccount": "Already have an account?",
+    "orContinueWith": "Or continue with",
+    "google": "Google"
+  },
+  "my": {
+    "designsTitle": "My Designs",
+    "noDesigns": "You haven't created any designs yet.",
+    "startDesigning": "Start Designing",
+    "public": "Public",
+    "private": "Private"
+  },
+  "footer": {
+    "about": "About Kraftly",
+    "forArtisans": "For Artisans",
+    "gallery": "Gallery",
+    "faq": "FAQ",
+    "copyright": "© OVVN / LILYFE"
+  },
+  "jewelryTypes": {
+    "ring": "Ring",
+    "necklace": "Necklace",
+    "earring": "Earring",
+    "bracelet": "Bracelet",
+    "brooch": "Brooch"
+  },
+  "materials": {
+    "silver": "Sterling Silver",
+    "gold_14k": "14K Gold",
+    "gold_18k": "18K Gold",
+    "rose_gold": "Rose Gold",
+    "platinum": "Platinum"
+  }
+}
