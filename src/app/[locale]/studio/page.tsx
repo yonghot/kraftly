@@ -115,11 +115,11 @@ export default function StudioPage() {
         ? `${selectedCategoryData.name_en} Korean jewelry design, ${jewelryType}, ${material?.replace(/_/g, " ")}, studio photography`
         : "elegant Korean jewelry design, studio photography";
       const fallbackSeed = Date.now();
-      const fallbackImages = Array.from({ length: 4 }).map(
+      const fallbackImages = Array.from({ length: 2 }).map(
         (_, i) =>
           `https://image.pollinations.ai/prompt/${encodeURIComponent(fallbackPrompt)}?width=512&height=512&model=flux&nologo=true&seed=${fallbackSeed + i}`
       );
-      setImageLoaded(new Array(4).fill(false));
+      setImageLoaded(new Array(2).fill(false));
       setGeneratedImages(fallbackImages);
 
       setTimeout(() => {
@@ -305,7 +305,7 @@ export default function StudioPage() {
               {/* 이미지 그리드 */}
               <div className="grid grid-cols-2 gap-3">
                 {isGenerating && generatedImages.length === 0
-                  ? Array.from({ length: 4 }).map((_, i) => (
+                  ? Array.from({ length: 2 }).map((_, i) => (
                       <Skeleton
                         key={i}
                         className="aspect-square rounded-xl bg-dark-surface-mid"

@@ -15,6 +15,7 @@ beforeEach(() => {
   jest.resetModules();
   process.env = { ...originalEnv };
   delete process.env.REPLICATE_API_TOKEN;
+  delete process.env.TOGETHER_API_KEY;
 });
 
 afterAll(() => {
@@ -76,7 +77,7 @@ describe("POST /api/generate", () => {
   });
 
   describe("Pollinations.ai 폴백 (API 토큰 없음)", () => {
-    it("유효한 요청 시 Pollinations AI 이미지 URL 4장을 반환한다", async () => {
+    it("유효한 요청 시 Pollinations AI 이미지 URL 2장을 반환한다", async () => {
       const req = createRequest({
         category_id: "hanbok",
         jewelry_type: "ring",
@@ -86,7 +87,7 @@ describe("POST /api/generate", () => {
       expect(res.status).toBe(200);
 
       const data = await res.json();
-      expect(data.images).toHaveLength(4);
+      expect(data.images).toHaveLength(2);
       expect(data.design_id).toMatch(/^pol-/);
       expect(data.prompt_used).toBeDefined();
       // Pollinations.ai URL인지 확인
