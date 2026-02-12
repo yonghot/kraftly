@@ -19,8 +19,6 @@ beforeEach(() => {
   jest.resetModules();
   process.env = { ...originalEnv };
   delete process.env.GEMINI_API_KEY;
-  delete process.env.REPLICATE_API_TOKEN;
-  delete process.env.TOGETHER_API_KEY;
 });
 
 afterAll(() => {
@@ -81,53 +79,20 @@ describe("POST /api/generate", () => {
     });
   });
 
-  describe("Pollinations.ai 폴백 (API 토큰 없음)", () => {
-    it("유효한 요청 시 Pollinations AI 이미지 URL 1장을 반환한다", async () => {
+  describe("GEMINI_API_KEY 미설정", () => {
+    it("API 키가 없으면 503을 반환한다", async () => {
       const req = createRequest({
         category_id: "hanbok",
         jewelry_type: "ring",
         material: "silver",
       });
       const res = await POST(req);
-      expect(res.status).toBe(200);
-
+      expect(res.status).toBe(503);
       const data = await res.json();
-      expect(data.images).toHaveLength(1);
-      expect(data.design_id).toMatch(/^pol-/);
-      expect(data.prompt_used).toBeDefined();
-      // Pollinations.ai URL인지 확인
-      for (const url of data.images) {
-        expect(url).toContain("image.pollinations.ai");
-      }
+      expect(data.error).toContain("GEMINI_API_KEY");
     });
 
-    it("프롬프트에 jewelry_type과 material이 치환된다", async () => {
-      const req = createRequest({
-        category_id: "hanbok",
-        jewelry_type: "necklace",
-        material: "gold_18k",
-      });
-      const res = await POST(req);
-      const data = await res.json();
-
-      expect(data.prompt_used).toContain("necklace");
-      expect(data.prompt_used).toContain("18K yellow gold");
-    });
-
-    it("user_prompt가 있으면 프롬프트에 추가된다", async () => {
-      const req = createRequest({
-        category_id: "minimal_seoul",
-        jewelry_type: "earring",
-        material: "rose_gold",
-        user_prompt: "with cherry blossom motif",
-      });
-      const res = await POST(req);
-      const data = await res.json();
-
-      expect(data.prompt_used).toContain("cherry blossom motif");
-    });
-
-    it("모든 6개 카테고리에 대해 정상 응답한다", async () => {
+    it("모든 6개 카테고리에 대해 503을 반환한다 (키 없음)", async () => {
       const categories = [
         "hanbok",
         "minimal_seoul",
@@ -144,7 +109,7 @@ describe("POST /api/generate", () => {
           material: "silver",
         });
         const res = await POST(req);
-        expect(res.status).toBe(200);
+        expect(res.status).toBe(503);
       }
     });
   });

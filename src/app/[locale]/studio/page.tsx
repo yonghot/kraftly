@@ -111,21 +111,7 @@ export default function StudioPage() {
       }, 300);
     } catch {
       setProgress(100);
-      // API 실패 시에도 Pollinations.ai로 이미지 생성 시도
-      const fallbackPrompt = selectedCategoryData
-        ? `${selectedCategoryData.name_en} Korean jewelry design, ${jewelryType}, ${material?.replace(/_/g, " ")}, studio photography`
-        : "elegant Korean jewelry design, studio photography";
-      const fallbackSeed = Date.now();
-      const fallbackImages = Array.from({ length: 1 }).map(
-        (_, i) =>
-          `https://image.pollinations.ai/prompt/${encodeURIComponent(fallbackPrompt)}?width=512&height=512&model=flux&nologo=true&seed=${fallbackSeed + i}`
-      );
-      setImageLoaded(new Array(2).fill(false));
-      setGeneratedImages(fallbackImages);
-
-      setTimeout(() => {
-        resultsRef.current?.scrollIntoView({ behavior: "smooth" });
-      }, 300);
+      setGeneratedImages([]);
     } finally {
       clearInterval(progressInterval);
       setGenerating(false);
