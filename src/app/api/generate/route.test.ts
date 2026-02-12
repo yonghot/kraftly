@@ -75,8 +75,8 @@ describe("POST /api/generate", () => {
     });
   });
 
-  describe("플레이스홀더 폴백 (API 토큰 없음)", () => {
-    it("유효한 요청 시 플레이스홀더 이미지 4장을 반환한다", async () => {
+  describe("Pollinations.ai 폴백 (API 토큰 없음)", () => {
+    it("유효한 요청 시 Pollinations AI 이미지 URL 4장을 반환한다", async () => {
       const req = createRequest({
         category_id: "hanbok",
         jewelry_type: "ring",
@@ -87,8 +87,12 @@ describe("POST /api/generate", () => {
 
       const data = await res.json();
       expect(data.images).toHaveLength(4);
-      expect(data.design_id).toMatch(/^dev-/);
+      expect(data.design_id).toMatch(/^pol-/);
       expect(data.prompt_used).toBeDefined();
+      // Pollinations.ai URL인지 확인
+      for (const url of data.images) {
+        expect(url).toContain("image.pollinations.ai");
+      }
     });
 
     it("프롬프트에 jewelry_type과 material이 치환된다", async () => {

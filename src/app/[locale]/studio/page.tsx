@@ -66,6 +66,7 @@ export default function StudioPage() {
 
   const resultsRef = useRef<HTMLDivElement>(null);
   const [shared, setShared] = useState(false);
+  const [imageLoaded, setImageLoaded] = useState<boolean[]>([]);
 
   const selectedCategoryData = K_DESIGN_CATEGORIES.find(
     (c) => c.id === selectedCategory
@@ -101,6 +102,7 @@ export default function StudioPage() {
 
       const data = await res.json();
       setProgress(100);
+      setImageLoaded(new Array(data.images.length).fill(false));
       setGeneratedImages(data.images);
 
       setTimeout(() => {
@@ -108,17 +110,17 @@ export default function StudioPage() {
       }, 300);
     } catch {
       setProgress(100);
-      const placeholders = Array.from({ length: 4 }).map(
+      // API 실패 시에도 Pollinations.ai로 이미지 생성 시도
+      const fallbackPrompt = selectedCategoryData
+        ? `${selectedCategoryData.name_en} Korean jewelry design, ${jewelryType}, ${material?.replace(/_/g, " ")}, studio photography`
+        : "elegant Korean jewelry design, studio photography";
+      const fallbackSeed = Date.now();
+      const fallbackImages = Array.from({ length: 4 }).map(
         (_, i) =>
-          `data:image/svg+xml,${encodeURIComponent(
-            `<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
-              <rect width="512" height="512" fill="${selectedCategoryData?.color_palette[i % 4] || "#E5E2DC"}22"/>
-              <text x="256" y="240" text-anchor="middle" font-family="serif" font-size="20" fill="${selectedCategoryData?.color_palette[0] || "#1B3A5C"}">K-Design</text>
-              <text x="256" y="280" text-anchor="middle" font-family="sans-serif" font-size="14" fill="#6B7280">${selectedCategoryData?.name_en || "Design"} #${i + 1}</text>
-            </svg>`
-          )}`
+          `https://image.pollinations.ai/prompt/${encodeURIComponent(fallbackPrompt)}?width=512&height=512&model=flux&nologo=true&seed=${fallbackSeed + i}`
       );
-      setGeneratedImages(placeholders);
+      setImageLoaded(new Array(4).fill(false));
+      setGeneratedImages(fallbackImages);
 
       setTimeout(() => {
         resultsRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -323,8 +325,27 @@ export default function StudioPage() {
                         <img
                           src={img}
                           alt={`Design ${i + 1}`}
-                          className="h-full w-full object-cover"
+                          className={cn(
+                            "h-full w-full object-cover transition-opacity duration-500",
+                            imageLoaded[i] ? "opacity-100" : "opacity-0"
+                          )}
+                          onLoad={() =>
+                            setImageLoaded((prev) => {
+                              const next = [...prev];
+                              next[i] = true;
+                              return next;
+                            })
+                          }
                         />
+                        {/* 이미지 로딩 중 오버레이 */}
+                        {!imageLoaded[i] && (
+                          <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-dark-surface-mid">
+                            <RefreshCw className="h-5 w-5 animate-spin text-dark-accent/60" />
+                            <span className="text-[10px] text-dark-text-muted">
+                              AI 생성 중...
+                            </span>
+                          </div>
+                        )}
                         {selectedImageIndex === i && (
                           <div className="absolute inset-0 flex items-center justify-center bg-dark-accent/15">
                             <div className="flex h-8 w-8 items-center justify-center rounded-full bg-dark-accent">

@@ -36,15 +36,16 @@ export async function POST(request: NextRequest) {
     const replicateToken = process.env.REPLICATE_API_TOKEN;
 
     if (!replicateToken) {
-      // API 토큰이 없을 경우 — 플레이스홀더 반환 (개발용)
-      const placeholderImages = Array.from({ length: 4 }).map(
+      // Replicate 토큰이 없을 경우 — Pollinations.ai 무료 API 사용
+      const baseSeed = Date.now();
+      const pollinationsImages = Array.from({ length: 4 }).map(
         (_, i) =>
-          `https://placehold.co/512x512/${category.color_palette[i % 4].replace("#", "")}/${category.color_palette[(i + 1) % 4].replace("#", "")}?text=K-Design+${i + 1}`
+          `https://image.pollinations.ai/prompt/${encodeURIComponent(fullPrompt)}?width=512&height=512&model=flux&nologo=true&seed=${baseSeed + i}`
       );
 
       return NextResponse.json({
-        images: placeholderImages,
-        design_id: `dev-${Date.now()}`,
+        images: pollinationsImages,
+        design_id: `pol-${Date.now()}`,
         prompt_used: fullPrompt,
       });
     }
