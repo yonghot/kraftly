@@ -18,9 +18,10 @@ import {
   X,
 } from "lucide-react";
 import { useCallback, useRef, useState } from "react";
-import { Link } from "@/i18n/navigation";
+import { Link, useRouter } from "@/i18n/navigation";
 import { useLocale } from "next-intl";
 import type { JewelryType, Material } from "@/types";
+import { useArtisanStore } from "@/stores/artisan-store";
 import { cn } from "@/lib/utils";
 
 const JEWELRY_TYPES: { value: JewelryType; labelKey: string }[] = [
@@ -383,15 +384,13 @@ export default function StudioPage() {
                     <Share2 className="mr-1.5 h-3.5 w-3.5" />
                     {shared ? "Shared!" : t("shareToGallery")}
                   </Button>
-                  <Button
-                    size="sm"
-                    className="rounded-lg bg-dark-surface-high text-dark-text-muted"
-                    disabled
-                  >
-                    <ShoppingBag className="mr-1.5 h-3.5 w-3.5" />
-                    {t("findArtisan")}
-                    <span className="ml-1 text-[10px] opacity-60">(Phase 2)</span>
-                  </Button>
+                  <FindArtisanButton
+                    categoryId={selectedCategory}
+                    jewelryType={jewelryType}
+                    material={material}
+                    designImageUrl={generatedImages[0] || null}
+                    label={t("findArtisan")}
+                  />
                 </div>
               )}
             </section>
@@ -457,5 +456,51 @@ export default function StudioPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+function FindArtisanButton({
+  categoryId,
+  jewelryType,
+  material,
+  designImageUrl,
+  label,
+}: {
+  categoryId: string | null;
+  jewelryType: JewelryType | null;
+  material: Material | null;
+  designImageUrl: string | null;
+  label: string;
+}) {
+  const artisanRouter = useRouter();
+  const setMatchRequest = useArtisanStore((s) => s.setMatchRequest);
+
+  const handleClick = () => {
+    setMatchRequest({
+      categoryId,
+      jewelryType,
+      material,
+      designImageUrl,
+    });
+    artisanRouter.push("/artisans/match");
+  };
+
+  const disabled = !jewelryType || !material;
+
+  return (
+    <Button
+      size="sm"
+      className={cn(
+        "rounded-lg",
+        disabled
+          ? "bg-dark-surface-high text-dark-text-muted"
+          : "bg-gold text-white hover:bg-gold/90"
+      )}
+      disabled={disabled}
+      onClick={handleClick}
+    >
+      <ShoppingBag className="mr-1.5 h-3.5 w-3.5" />
+      {label}
+    </Button>
   );
 }

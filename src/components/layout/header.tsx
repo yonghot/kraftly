@@ -33,6 +33,7 @@ export function Header() {
   const navItems = [
     { href: "/studio" as const, label: t("studio") },
     { href: "/gallery" as const, label: t("gallery") },
+    { href: "/artisans" as const, label: t("artisans") },
   ];
 
   return (

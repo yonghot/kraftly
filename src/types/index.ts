@@ -76,3 +76,71 @@ export interface GalleryFilters {
   jewelryType: JewelryType | null;
   sort: SortOption;
 }
+
+// ============================================
+// Artisan Types
+// ============================================
+
+export type Technique =
+  | "lost_wax"
+  | "hand_forging"
+  | "filigree"
+  | "stone_setting"
+  | "engraving"
+  | "enamel"
+  | "najeon";
+
+export interface ArtisanProfile {
+  id: string;
+  display_name_en: string;
+  display_name_ko: string;
+  bio_en: string;
+  bio_ko: string;
+  specialties: JewelryType[];
+  materials: Material[];
+  techniques: Technique[];
+  portfolio_urls: string[];
+  location_en: string;
+  location_ko: string;
+  avg_rating: number;
+  total_reviews: number;
+  total_orders: number;
+  min_price_krw: number;
+  avg_lead_days: number;
+  is_verified: boolean;
+  is_active: boolean;
+  avatar_url: string;
+  years_experience: number;
+}
+
+export interface ArtisanReview {
+  id: string;
+  artisan_id: string;
+  reviewer_name: string;
+  rating: number;
+  comment_en: string;
+  comment_ko: string;
+  created_at: string;
+}
+
+export interface MatchedArtisan {
+  artisan: ArtisanProfile;
+  matchScore: number;
+  matchBreakdown: {
+    specialty: number;
+    material: number;
+    rating: number;
+    availability: number;
+  };
+}
+
+export interface QuoteRequest {
+  artisanId: string;
+  designImageUrl: string | null;
+  categoryId: string;
+  jewelryType: JewelryType;
+  material: Material;
+  budget: string;
+  deadline: string;
+  notes: string;
+}

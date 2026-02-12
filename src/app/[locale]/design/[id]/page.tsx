@@ -3,9 +3,10 @@ import { GALLERY_IMAGES } from "@/data/images";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { Heart, Share2, ShoppingBag, ArrowLeft } from "lucide-react";
+import { Heart, Share2, ArrowLeft } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import Image from "next/image";
+import { OrderButton } from "@/components/design/order-button";
 
 export default async function DesignDetailPage({
   params,
@@ -119,15 +120,10 @@ export default async function DesignDetailPage({
               <Share2 className="mr-1.5 h-3.5 w-3.5" />
               Share
             </Button>
-            <Button
-              size="sm"
-              className="rounded-lg bg-navy text-white hover:bg-navy/90"
-              disabled
-            >
-              <ShoppingBag className="mr-1.5 h-3.5 w-3.5" />
-              Order This Design
-              <span className="ml-1 text-[10px] opacity-60">(Coming Soon)</span>
-            </Button>
+            <OrderButton
+              categoryId={category.id}
+              imageUrl={imageUrl}
+            />
           </div>
         </div>
       </div>

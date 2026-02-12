@@ -40,9 +40,9 @@ export function Footer() {
             <Link href="/gallery" className="transition-colors hover:text-foreground">
               {t("gallery")}
             </Link>
-            <span className="cursor-default text-muted-foreground/40">
+            <Link href="/artisans" className="transition-colors hover:text-foreground">
               {t("forArtisans")}
-            </span>
+            </Link>
             <span className="cursor-default text-muted-foreground/40">
               {t("faq")}
             </span>
