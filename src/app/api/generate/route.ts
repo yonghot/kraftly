@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { GoogleGenAI } from "@google/genai";
 import { K_DESIGN_CATEGORIES } from "@/data/categories";
 
 const IMAGE_COUNT = 2;
@@ -34,44 +35,51 @@ export async function POST(request: NextRequest) {
       fullPrompt += `\nAdditional details: ${user_prompt}`;
     }
 
-    // 1순위: Together.ai (무료 FLUX.1-schnell — API 키 필요, 3개월 무료)
-    const togetherKey = process.env.TOGETHER_API_KEY;
-    if (togetherKey) {
-      const togetherRes = await fetch(
-        "https://api.together.xyz/v1/images/generations",
-        {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${togetherKey}`,
-            "Content-Type": "application/json",
+    // 1순위: Gemini (나노바나나) — GEMINI_API_KEY 필요, 무료 티어
+    const geminiKey = process.env.GEMINI_API_KEY;
+    if (geminiKey) {
+      const ai = new GoogleGenAI({ apiKey: geminiKey });
+
+      // 2개 이미지를 병렬로 생성
+      const imagePromises = Array.from({ length: IMAGE_COUNT }).map(() =>
+        ai.models.generateContent({
+          model: "gemini-2.0-flash-exp",
+          contents: [
+            {
+              role: "user",
+              parts: [{ text: fullPrompt }],
+            },
+          ],
+          config: {
+            responseModalities: ["IMAGE", "TEXT"],
           },
-          body: JSON.stringify({
-            model: "black-forest-labs/FLUX.1-schnell-Free",
-            prompt: fullPrompt,
-            width: 512,
-            height: 512,
-            steps: 4,
-            n: IMAGE_COUNT,
-            response_format: "b64_json",
-          }),
-        }
+        })
       );
 
-      if (togetherRes.ok) {
-        const togetherData = await togetherRes.json();
-        const images = (
-          togetherData.data as { b64_json: string }[]
-        ).map(
-          (item) => `data:image/png;base64,${item.b64_json}`
-        );
+      const results = await Promise.allSettled(imagePromises);
+      const images: string[] = [];
 
+      for (const result of results) {
+        if (result.status === "fulfilled" && result.value.candidates?.[0]) {
+          const parts = result.value.candidates[0].content?.parts ?? [];
+          for (const part of parts) {
+            if (part.inlineData) {
+              images.push(
+                `data:${part.inlineData.mimeType};base64,${part.inlineData.data}`
+              );
+            }
+          }
+        }
+      }
+
+      if (images.length > 0) {
         return NextResponse.json({
-          images,
-          design_id: `tog-${Date.now()}`,
+          images: images.slice(0, IMAGE_COUNT),
+          design_id: `gem-${Date.now()}`,
           prompt_used: fullPrompt,
         });
       }
-      // Together.ai 실패 시 → 다음 옵션으로 진행
+      // Gemini 실패 시 → 다음 옵션으로 진행
     }
 
     // 2순위: Replicate API (유료 — REPLICATE_API_TOKEN 필요)
@@ -99,8 +107,6 @@ export async function POST(request: NextRequest) {
             typeof item === "string" ? item : String(item)
           )
         : [];
-
-      // TODO: Supabase Storage에 업로드 및 designs 테이블에 레코드 생성
 
       return NextResponse.json({
         images,

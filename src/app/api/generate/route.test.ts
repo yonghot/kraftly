@@ -5,6 +5,10 @@
  * POST /api/generate — AI 이미지 생성 API 테스트
  * 우선순위: P1 (핵심 비즈니스 로직)
  */
+jest.mock("@google/genai", () => ({
+  GoogleGenAI: jest.fn(),
+}));
+
 import { POST } from "./route";
 import { NextRequest } from "next/server";
 
@@ -14,6 +18,7 @@ const originalEnv = process.env;
 beforeEach(() => {
   jest.resetModules();
   process.env = { ...originalEnv };
+  delete process.env.GEMINI_API_KEY;
   delete process.env.REPLICATE_API_TOKEN;
   delete process.env.TOGETHER_API_KEY;
 });
