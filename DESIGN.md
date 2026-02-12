@@ -11,7 +11,7 @@
 - **모바일 퍼스트**: 해외 소비자 모바일 비율 70%+ 대응
 - **영문 UI 우선**: 1차 타겟이 해외 소비자
 - **몰입형 AI Studio**: Google Stitch 스타일의 다크 캔버스 기반 AI 생성 워크스페이스
-- **이중 테마**: 일반 페이지(라이트) + AI Studio(다크) — `next-themes` 활용
+- **이중 테마**: 일반 페이지(라이트) + AI Studio(다크) — `.dark` CSS 클래스 + Tailwind v4 `@custom-variant`
 - **표면 계층 구조**: 그림자 대신 미묘한 배경색 차이로 depth 표현 (M3 Surface Container 패턴)
 - **최소 크롬**: AI Studio에서는 네비게이션을 최소화하고 콘텐츠에 집중
 

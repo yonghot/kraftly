@@ -27,3 +27,9 @@
 
 ### #007 — 2026-02-12
 `/sc:implement` 업데이트 된 DESIGN.md 파일을 참고해서 현재 프로젝트의 UI/UX 디자인을 대폭 개선해줘. 레퍼런스 사이트는 https://stitch.withgoogle.com/ 니까 적극적으로 참고해서 동등한 수준과 동일한 스타일로 개선하면 돼. `/sc:git` 커밋하고 푸시해줘. 그리고 바로 프로덕션 환경에 반영되도록 해줘. `/sc:document` 지금까지 작업한 내용을 반영이 '필요'한 모든 .md 파일들에 최신화시켜 줘
+
+### #008 — 2026-02-12
+`/sc:troubleshoot` 디자인이 전혀 수정안됐는데? 프로덕션 환경에 배포돼있는거 맞아? `--persona-analyzer --ultrathink --seq --c7`
+
+### #009 — 2026-02-12
+`/sc:document` 지금까지 작업한 내용을 반영이 '필요'한 모든 .md 파일들에 최신화시켜 줘 `--persona-architect --ultrathink --seq --c7`

@@ -156,11 +156,13 @@ npm install @supabase/supabase-js @supabase/ssr replicate next-intl zustand
 - **Footer**: About \| For Artisans \| Gallery \| FAQ \| Language Selector \| © OVVN / LILYFE
 
 #### 6.2 K-Design AI Studio (`/[locale]/studio/page.tsx`) — 킬러 기능
-- **Step 1**: K-Design Style 선택 — 6개 카테고리 카드 가로 스크롤, 선택 시 배경 그라데이션 변경
-- **Step 2**: Design Details — Jewelry Type 선택, Material 선택, 추가 설명 입력(선택, 200자)
-- **Step 3**: Generate 버튼 → AI 이미지 4장 생성 → 2x2 그리드 표시
-- 이미지 선택 후: 확대 표시 + Regenerate, Share to Gallery, Find Artisan(Phase 2) 버튼
+- **레이아웃**: Google Stitch 스타일 다크 몰입형 워크스페이스 (전체 화면, Header 최소화, Footer 숨김)
+- **미니 헤더**: 뒤로가기 + 로고 + 타이틀 (h-14, 다크 테마)
+- **캔버스 영역**: 6개 카테고리 그리드 → Jewelry Type/Material 칩 선택 → AI 이미지 2x2 그리드 생성 결과
+- **플로팅 프롬프트 바**: 하단 고정, 선택된 옵션 칩 표시 + 프롬프트 입력 + Generate 버튼
+- 이미지 선택 후: gold-glow 하이라이트 + Regenerate, Share to Gallery, Find Artisan(Phase 2) 버튼
 - **로딩 UX**: 스켈레톤 UI + "AI is crafting your K-Design..." + 프로그레스 바 (10~30초)
+- **다크 테마**: `.dark` CSS 클래스 + M3 Surface Container 계층 구조
 - **Rate Limit**: 비로그인 하루 2회, 로그인 무료 하루 5회
 
 #### 6.3 갤러리 (`/[locale]/gallery/page.tsx`)
