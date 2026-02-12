@@ -130,6 +130,7 @@ src/
 | 4 | Windows 환경에서 `xcopy` 명령 실패 | bash 환경에서 Windows 전용 명령 호환성 문제 | PowerShell `Copy-Item` 명령으로 대체 |
 | 5 | AI Studio 다크 모드에 `next-themes` 불필요 | Studio만 다크 테마가 필요하고 전역 테마 전환은 Phase 1 범위 밖 | `.dark` CSS 클래스를 Studio 페이지 wrapper에 직접 적용 + `@custom-variant dark` 활용 |
 | 6 | Studio에서 Header/Footer 숨기기 | 레이아웃 구조 변경 없이 조건부 렌더링 필요 | `usePathname()`으로 `/studio` 경로 감지 시 `null` 반환 |
+| 7 | `git push` 후 Vercel 자동 배포 안 됨 | CLI(`vercel --prod`)로 수동 배포하여 Git Integration이 미설정 | 배포 시 `npx vercel --prod` 수동 실행 필요. 또는 Vercel 대시보드에서 GitHub 저장소 연결 설정 |
 
 ---
 
