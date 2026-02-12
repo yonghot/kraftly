@@ -1,8 +1,10 @@
 "use client";
 
 import type { DesignCategory } from "@/types";
+import Image from "next/image";
 import { useLocale } from "next-intl";
 import { cn } from "@/lib/utils";
+import { CATEGORY_IMAGES } from "@/data/images";
 
 interface CategoryCardProps {
   category: DesignCategory;
@@ -21,6 +23,7 @@ export function CategoryCard({
   const name = locale === "ko" ? category.name_ko : category.name_en;
   const description =
     locale === "ko" ? category.description_ko : category.description_en;
+  const imageUrl = CATEGORY_IMAGES[category.id];
 
   return (
     <button
@@ -31,29 +34,27 @@ export function CategoryCard({
           ? "border-gold shadow-lg shadow-gold/20"
           : "border-transparent shadow-sm hover:shadow-md"
       )}
-      style={{
-        background: `linear-gradient(135deg, ${category.color_palette[0]}20, ${category.color_palette[1]}30, ${category.color_palette[2]}20)`,
-      }}
     >
-      {/* 컬러 오브 장식 */}
-      <div className="absolute inset-0 overflow-hidden">
-        {category.color_palette.map((color, i) => (
-          <div
-            key={i}
-            className="absolute rounded-full opacity-20 blur-2xl"
-            style={{
-              backgroundColor: color,
-              width: `${60 + i * 20}px`,
-              height: `${60 + i * 20}px`,
-              top: `${10 + i * 20}%`,
-              left: `${10 + i * 25}%`,
-            }}
-          />
-        ))}
-      </div>
+      {/* 배경 이미지 */}
+      {imageUrl ? (
+        <Image
+          src={imageUrl}
+          alt={name}
+          fill
+          className="object-cover transition-transform duration-500 group-hover:scale-105"
+          sizes="(max-width: 768px) 50vw, 33vw"
+        />
+      ) : (
+        <div
+          className="absolute inset-0"
+          style={{
+            background: `linear-gradient(135deg, ${category.color_palette[0]}20, ${category.color_palette[1]}30, ${category.color_palette[2]}20)`,
+          }}
+        />
+      )}
 
       {/* 하단 그라데이션 오버레이 + 텍스트 */}
-      <div className="relative z-10 bg-gradient-to-t from-black/70 via-black/30 to-transparent p-4 pt-16">
+      <div className="relative z-10 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-4 pt-20">
         <h3 className="text-sm font-bold text-white">{name}</h3>
         {showDescription && description && (
           <p className="mt-1 line-clamp-2 text-xs text-white/80">

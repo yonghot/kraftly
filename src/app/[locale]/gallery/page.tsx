@@ -2,6 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import { K_DESIGN_CATEGORIES } from "@/data/categories";
+import { GALLERY_IMAGES } from "@/data/images";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -9,6 +10,7 @@ import { Heart, Sparkles } from "lucide-react";
 import { useState } from "react";
 import { Link } from "@/i18n/navigation";
 import { useLocale } from "next-intl";
+import Image from "next/image";
 import type { JewelryType } from "@/types";
 import { cn } from "@/lib/utils";
 
@@ -20,7 +22,7 @@ const MOCK_DESIGNS = K_DESIGN_CATEGORIES.flatMap((cat, catIdx) =>
       ["ring", "necklace", "earring", "bracelet", "brooch"] as JewelryType[]
     )[(catIdx + i) % 5],
     likes_count: Math.floor(Math.random() * 50) + 5,
-    image_url: null as string | null,
+    image_url: GALLERY_IMAGES[cat.id]?.[i] ?? null,
     color: cat.color_palette[i % 4],
   }))
 );
@@ -43,7 +45,7 @@ export default function GalleryPage() {
   return (
     <div className="mx-auto max-w-6xl px-4 py-10 md:px-8 md:py-14">
       {/* 타이틀 */}
-      <h1 className="text-center font-serif text-3xl font-bold tracking-tight text-navy md:text-4xl">
+      <h1 className="text-center text-3xl font-bold tracking-tight text-navy md:text-4xl">
         {t("title")}
       </h1>
 
@@ -124,19 +126,35 @@ export default function GalleryPage() {
                 href={`/design/${design.id}`}
                 className="group mb-3 block break-inside-avoid overflow-hidden rounded-2xl border border-warm-border/40 bg-card transition-all duration-300 hover:border-gold/20 hover:shadow-lg hover:shadow-gold/5"
               >
-                {/* 이미지 (플레이스홀더) */}
+                {/* 이미지 */}
                 <div
-                  className="relative flex items-center justify-center overflow-hidden"
+                  className="relative overflow-hidden"
                   style={{
                     aspectRatio:
                       design.jewelry_type === "necklace" ? "3/4" : "1/1",
-                    background: `linear-gradient(135deg, ${design.color}15, ${category?.color_palette[1] || "#E5E2DC"}22)`,
                   }}
                 >
-                  <Sparkles
-                    className="h-8 w-8 opacity-15 transition-all duration-300 group-hover:scale-110 group-hover:opacity-30"
-                    style={{ color: design.color }}
-                  />
+                  {design.image_url ? (
+                    <Image
+                      src={design.image_url}
+                      alt={`${catName} design`}
+                      fill
+                      className="object-cover transition-transform duration-500 group-hover:scale-105"
+                      sizes="(max-width: 768px) 50vw, 25vw"
+                    />
+                  ) : (
+                    <div
+                      className="flex h-full items-center justify-center"
+                      style={{
+                        background: `linear-gradient(135deg, ${design.color}15, ${category?.color_palette[1] || "#E5E2DC"}22)`,
+                      }}
+                    >
+                      <Sparkles
+                        className="h-8 w-8 opacity-15"
+                        style={{ color: design.color }}
+                      />
+                    </div>
+                  )}
                 </div>
 
                 {/* 정보 */}

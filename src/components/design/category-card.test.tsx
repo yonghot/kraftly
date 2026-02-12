@@ -11,6 +11,22 @@ jest.mock("next-intl", () => ({
   useLocale: () => "en",
 }));
 
+// next/image 모킹
+jest.mock("next/image", () => ({
+  __esModule: true,
+  default: (props: Record<string, unknown>) => {
+    const { fill, priority, ...rest } = props;
+    return <img data-fill={fill ? "true" : undefined} data-priority={priority ? "true" : undefined} {...rest} />;
+  },
+}));
+
+// 이미지 데이터 모킹
+jest.mock("@/data/images", () => ({
+  CATEGORY_IMAGES: {
+    hanbok: "https://images.unsplash.com/test-hanbok",
+  },
+}));
+
 const mockCategory: DesignCategory = {
   id: "hanbok",
   name_en: "Hanbok Heritage",
@@ -61,9 +77,10 @@ describe("CategoryCard", () => {
     ).not.toBeInTheDocument();
   });
 
-  it("카테고리 컬러 팔레트로 배경이 설정된다", () => {
+  it("카테고리 이미지가 배경으로 렌더링된다", () => {
     render(<CategoryCard category={mockCategory} />);
-    const button = screen.getByRole("button");
-    expect(button.style.background).toContain("#8B1A1A");
+    const img = screen.getByAltText("Hanbok Heritage");
+    expect(img).toBeInTheDocument();
+    expect(img).toHaveAttribute("src", "https://images.unsplash.com/test-hanbok");
   });
 });

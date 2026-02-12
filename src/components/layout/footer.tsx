@@ -23,7 +23,7 @@ export function Footer() {
               <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-gradient-to-br from-gold to-gold/80">
                 <Sparkles className="h-3.5 w-3.5 text-white" />
               </div>
-              <span className="font-serif text-lg font-bold tracking-tight text-navy">
+              <span className="text-lg font-bold tracking-tighter text-navy">
                 Kraftly
               </span>
             </div>

@@ -55,10 +55,9 @@ export default async function LocaleLayout({
   return (
     <html lang={locale} className={`${inter.variable} ${playfair.variable}`}>
       <head>
+        <link rel="preconnect" href="https://cdn.jsdelivr.net" crossOrigin="anonymous" />
         <link
           rel="stylesheet"
-          as="style"
-          crossOrigin="anonymous"
           href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"
         />
       </head>

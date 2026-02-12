@@ -43,7 +43,7 @@ export function Header() {
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-gold to-gold/80">
             <Sparkles className="h-4 w-4 text-white" />
           </div>
-          <span className="font-serif text-xl font-bold tracking-tight text-navy">
+          <span className="text-xl font-bold tracking-tighter text-navy">
             Kraftly
           </span>
         </Link>

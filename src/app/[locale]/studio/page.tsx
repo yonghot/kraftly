@@ -3,9 +3,11 @@
 import { useTranslations } from "next-intl";
 import { useDesignStore } from "@/stores/design-store";
 import { K_DESIGN_CATEGORIES } from "@/data/categories";
+import { CATEGORY_IMAGES } from "@/data/images";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Skeleton } from "@/components/ui/skeleton";
+import Image from "next/image";
 import {
   Sparkles,
   RefreshCw,
@@ -150,7 +152,7 @@ export default function StudioPage() {
           </Link>
           <div className="flex items-center gap-2">
             <Sparkles className="h-4 w-4 text-dark-accent" />
-            <span className="font-serif text-sm font-semibold text-dark-text">
+            <span className="text-sm font-bold tracking-tighter text-dark-text">
               Kraftly
             </span>
           </div>
@@ -183,26 +185,24 @@ export default function StudioPage() {
                         ? "border-dark-accent gold-glow"
                         : "border-dark-border hover:border-dark-surface-highest"
                     )}
-                    style={{
-                      background: `linear-gradient(135deg, ${category.color_palette[0]}18, ${category.color_palette[1]}25, ${category.color_palette[2]}15)`,
-                    }}
                   >
-                    {/* 컬러 오브 */}
-                    <div className="absolute inset-0 overflow-hidden">
-                      {category.color_palette.slice(0, 3).map((color, i) => (
-                        <div
-                          key={i}
-                          className="absolute rounded-full opacity-15 blur-2xl transition-opacity group-hover:opacity-25"
-                          style={{
-                            backgroundColor: color,
-                            width: `${50 + i * 15}px`,
-                            height: `${50 + i * 15}px`,
-                            top: `${15 + i * 20}%`,
-                            left: `${10 + i * 25}%`,
-                          }}
-                        />
-                      ))}
-                    </div>
+                    {/* 배경 이미지 */}
+                    {CATEGORY_IMAGES[category.id] ? (
+                      <Image
+                        src={CATEGORY_IMAGES[category.id]}
+                        alt={name}
+                        fill
+                        className="object-cover transition-transform duration-500 group-hover:scale-105"
+                        sizes="(max-width: 640px) 50vw, 16vw"
+                      />
+                    ) : (
+                      <div
+                        className="absolute inset-0"
+                        style={{
+                          background: `linear-gradient(135deg, ${category.color_palette[0]}18, ${category.color_palette[1]}25, ${category.color_palette[2]}15)`,
+                        }}
+                      />
+                    )}
 
                     {/* 하단 텍스트 */}
                     <div className="relative z-10 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-3 pt-12">

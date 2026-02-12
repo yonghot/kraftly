@@ -1,9 +1,11 @@
 import { K_DESIGN_CATEGORIES } from "@/data/categories";
+import { GALLERY_IMAGES } from "@/data/images";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { Heart, Share2, ShoppingBag, ArrowLeft, Sparkles } from "lucide-react";
+import { Heart, Share2, ShoppingBag, ArrowLeft } from "lucide-react";
 import { Link } from "@/i18n/navigation";
+import Image from "next/image";
 
 export default async function DesignDetailPage({
   params,
@@ -16,6 +18,12 @@ export default async function DesignDetailPage({
     id.split("").reduce((acc, c) => acc + c.charCodeAt(0), 0) % 6
   );
   const category = K_DESIGN_CATEGORIES[categoryIdx];
+
+  const categoryImages = GALLERY_IMAGES[category.id] ?? [];
+  const imageIdx = Math.abs(
+    id.split("").reduce((acc, c) => acc + c.charCodeAt(0), 0) % Math.max(categoryImages.length, 1)
+  );
+  const imageUrl = categoryImages[imageIdx] ?? null;
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-10 md:px-8 md:py-14">
@@ -30,16 +38,24 @@ export default async function DesignDetailPage({
 
       <div className="grid gap-10 md:grid-cols-2">
         {/* 이미지 */}
-        <div
-          className="flex aspect-square items-center justify-center overflow-hidden rounded-2xl border border-warm-border/40"
-          style={{
-            background: `linear-gradient(135deg, ${category.color_palette[0]}18, ${category.color_palette[1]}25)`,
-          }}
-        >
-          <Sparkles
-            className="h-16 w-16 opacity-15"
-            style={{ color: category.color_palette[0] }}
-          />
+        <div className="relative aspect-square overflow-hidden rounded-2xl border border-warm-border/40">
+          {imageUrl ? (
+            <Image
+              src={imageUrl}
+              alt={`${category.name_en} Design`}
+              fill
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw, 50vw"
+              priority
+            />
+          ) : (
+            <div
+              className="flex h-full items-center justify-center"
+              style={{
+                background: `linear-gradient(135deg, ${category.color_palette[0]}18, ${category.color_palette[1]}25)`,
+              }}
+            />
+          )}
         </div>
 
         {/* 정보 */}
@@ -54,7 +70,7 @@ export default async function DesignDetailPage({
             {category.name_en}
           </Badge>
 
-          <h1 className="font-serif text-2xl font-bold tracking-tight text-navy">
+          <h1 className="text-2xl font-bold tracking-tight text-navy">
             {category.name_en} Design
           </h1>
 
