@@ -69,10 +69,13 @@ Google Stitch 인터페이스 분석 결과를 기반으로 한 다크 테마 �
 
 | 용도 | 폰트 | 비고 |
 |------|------|------|
-| Heading | Playfair Display (serif) | 럭셔리 느낌, Google Fonts |
-| Body | Inter (sans-serif) | 가독성, Google Fonts. Stitch는 Google Sans 사용 → 대응 |
-| Korean | Pretendard | 한글 전용, CDN 웹폰트 |
+| Primary (sans) | Pretendard Variable | CDN 웹폰트, `--font-sans` 최우선. 한글+영문 겸용 |
+| Heading | Playfair Display (serif) | 럭셔리 느낌, Google Fonts. `--font-serif` |
+| Body fallback | Inter (sans-serif) | Pretendard 미로드 시 폴백 |
 | Mono | JetBrains Mono | 코드/기술 정보 표시용 (필요 시) |
+
+> **변경 이력**: 기존 Body=Inter → Pretendard를 `--font-sans` 최우선으로 변경 (2026-02-12).
+> 로고 폰트도 `font-serif` → `font-sans tracking-tighter`로 변경하여 Pretendard 기반 모던 로고로 전환.
 
 ### 크기 스케일
 - Tailwind 기본 스케일 사용 (`text-sm`, `text-base`, `text-lg`, `text-xl`, `text-2xl` 등)
@@ -271,9 +274,13 @@ Tailwind 기본 브레이크포인트 사용:
 
 - Next.js `<Image>` 컴포넌트 사용 (자동 WebP 변환, lazy loading)
 - AI 생성 이미지: Supabase Storage에 저장
-- 카테고리 썸네일: 정적 에셋 또는 Supabase Storage
+- **플레이스홀더 이미지**: Unsplash 무료 주얼리 사진 사용 (`src/data/images.ts`에서 중앙 관리)
+  - `HERO_IMAGES`: Hero 배경용 (1장)
+  - `CATEGORY_IMAGES`: 카테고리별 대표 이미지 (6장)
+  - `GALLERY_IMAGES`: 갤러리/상세 페이지용 (카테고리당 3장, 총 18장)
 - 이미지 비율: AI 생성 이미지 1:1, 카테고리 카드 3:4
 - 다크 테마 이미지 카드: `rounded-xl overflow-hidden` + 미묘한 `ring-1 ring-dark-border`
+- `next.config.ts`에 `images.unsplash.com` 도메인 등록
 
 ---
 
@@ -423,3 +430,4 @@ Tailwind CSS v4 + shadcn/ui 테마 커스터마이징 (`globals.css`):
 | 2026-02-11 | Phase 1 초안 구현 완료 — shadcn/ui 14개 컴포넌트 설치, Toast→Sonner 대체, globals.css에 Kraftly 테마 적용, Tailwind CSS v4 + tw-animate-css 적용 |
 | 2026-02-11 | Google Stitch UI 분석 적용 — 다크 테마 팔레트 추가, AI Studio 레이아웃 재설계 (플로팅 프롬프트 바), 표면 계층 시스템 도입, shadcn/ui 확장 계획 (12개 컴포넌트 추가 예정), 애니메이션/트랜지션 가이드 추가, 다크 모드 CSS 토큰 정의 |
 | 2026-02-12 | Stitch 스타일 UI/UX 구현 완료 — globals.css `.dark` 클래스 + M3 Surface Container 토큰 구현, AI Studio 다크 몰입형 워크스페이스 (플로팅 프롬프트 바, 카테고리 그리드, 칩 선택기), Header/Footer Studio 조건부 숨김, 랜딩·갤러리·상세·Auth 페이지 전체 UI 개선, gold-glow 유틸리티 클래스 |
+| 2026-02-12 | Pretendard 폰트 + 실사 이미지 전면 적용 — `--font-sans`를 Pretendard 최우선으로 변경, Unsplash 실사 이미지 전면 도입 (`src/data/images.ts` 중앙 관리), Hero 섹션 실사 배경 이미지 + 오버레이, Gallery/Category/Detail/Studio 모든 카드에 `next/image` 실사 이미지, 로고 폰트 `font-serif` → `tracking-tighter` (Pretendard 기반) |

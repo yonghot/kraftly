@@ -33,3 +33,6 @@
 
 ### #009 — 2026-02-12
 `/sc:document` 지금까지 작업한 내용을 반영이 '필요'한 모든 .md 파일들에 최신화시켜 줘 `--persona-architect --ultrathink --seq --c7`
+
+### #010 — 2026-02-12
+`/sc:implement` 구글 스티치 웹사이트의 디자인이 사실상 전혀 적용되지 않은것 처럼 보여. 폰트, 레이아웃 등을 더 적극적으로 반영 및 개선 해줘. 폰트는 pretendard, 히어로 섹션 등을 활용하면 아주 좋겠어. 그리고 디자인하는데 있어 사진과 같은 실사 이미지를 적극적으로 활용해줘. `--persona-frontend --focus frontend --ultrathink --seq --c7`
