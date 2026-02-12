@@ -208,9 +208,12 @@ npm install @supabase/supabase-js @supabase/ssr replicate next-intl zustand
 
 ## 8. Phase별 개발 범위
 
-### Phase 1: AI Design Prototype (킬러 기능) — ✅ 초안 개발 완료 (2026-02-11)
-- ✅ 랜딩 페이지 (반응형, 영문 UI)
-- ✅ K-Design AI Studio — 카테고리 선택 → AI 이미지 4장 생성 (Replicate API 연동 + 플레이스홀더 폴백)
+### Phase 1: AI Design Prototype (킬러 기능) — ✅ 초안 + UI/UX 개선 완료 (2026-02-12)
+- ✅ 랜딩 페이지 (반응형, 영문 UI) — Hero 그라디언트, 스텝 카드, 갤러리 프리뷰 개선
+- ✅ K-Design AI Studio — Google Stitch 스타일 다크 몰입형 워크스페이스 재설계 (플로팅 프롬프트 바, M3 Surface Container)
+- ✅ 갤러리 UI — 골드 필터 버튼, 카드 hover 효과, masonry 레이아웃 개선
+- ✅ 디자인 상세 / Auth 페이지 — 카드 기반 레이아웃 통일
+- ✅ 테스트 인프라 — Jest + Testing Library (58 tests, 10 suites 통과)
 - ⬜ 디자인 DB 저장 + 갤러리 공개 (API 스텁 구현, Supabase 연동 대기)
 - ⬜ Supabase Auth (이메일 로그인) — UI 구현 완료, Auth 연동 대기
 - ⬜ 비로그인 하루 2회 생성 — Rate Limiting 미구현

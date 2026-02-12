@@ -71,6 +71,7 @@ State:     Zustand 5
 i18n:      next-intl v4 (en, ko) — Phase 4에서 ja, zh 추가 예정
 Deploy:    Vercel
 Runtime:   React 19
+Testing:   Jest + @testing-library/react (58 tests, 10 suites)
 Payment:   Stripe (Phase 2)
 ```
 
@@ -127,6 +128,8 @@ src/
 | 2 | `shadcn add toast` 실패 | Toast 컴포넌트가 deprecated됨 | `sonner` 컴포넌트로 대체 |
 | 3 | Vercel link 시 대문자 프로젝트명 거부 | Vercel 프로젝트명은 소문자만 허용 | `--project=kraftly` 옵션으로 소문자 지정 |
 | 4 | Windows 환경에서 `xcopy` 명령 실패 | bash 환경에서 Windows 전용 명령 호환성 문제 | PowerShell `Copy-Item` 명령으로 대체 |
+| 5 | AI Studio 다크 모드에 `next-themes` 불필요 | Studio만 다크 테마가 필요하고 전역 테마 전환은 Phase 1 범위 밖 | `.dark` CSS 클래스를 Studio 페이지 wrapper에 직접 적용 + `@custom-variant dark` 활용 |
+| 6 | Studio에서 Header/Footer 숨기기 | 레이아웃 구조 변경 없이 조건부 렌더링 필요 | `usePathname()`으로 `/studio` 경로 감지 시 `null` 반환 |
 
 ---
 

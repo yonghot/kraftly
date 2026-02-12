@@ -296,10 +296,11 @@ Stitch 인터페이스 분석 기반 — 미니멀하고 부드러운 모션:
 
 ## 10. 다크 모드 구현 전략
 
-### next-themes 통합 (이미 설치됨)
-- `ThemeProvider`로 라이트/다크 전환
-- AI Studio 페이지: `forced-dark` 또는 페이지 레벨 다크 클래스 적용
-- 시스템 환경설정 감지: `attribute="class" defaultTheme="light"`
+### 다크 모드 적용 방식 (Phase 1 구현)
+- AI Studio: `.dark` CSS 클래스를 페이지 wrapper에 직접 적용 (`<div className="dark">`)
+- `@custom-variant dark (&:is(.dark *))` — Tailwind v4 다크 변형으로 자동 적용
+- Header/Footer: `usePathname()`으로 `/studio` 경로 감지 시 렌더링 제외
+- `next-themes`는 Phase 2 이후 전역 테마 전환 시 도입 예정
 
 ### CSS 변수 구조 (globals.css)
 ```css
@@ -347,7 +348,7 @@ Tailwind CSS v4 + shadcn/ui 테마 커스터마이징 (`globals.css`):
 | `--muted` | `#F5F0E8` | 보조 배경 |
 | `--border` | `#E5E2DC` | 테두리 |
 
-### 다크 테마 (구현 예정 — Stitch 기반)
+### 다크 테마 (구현 완료 — Stitch 기반)
 
 | shadcn 토큰 | Kraftly 다크 매핑 | 설명 |
 |-------------|------------------|------|
@@ -421,3 +422,4 @@ Tailwind CSS v4 + shadcn/ui 테마 커스터마이징 (`globals.css`):
 | 2026-02-10 | 초기 디자인 시스템 문서 작성 |
 | 2026-02-11 | Phase 1 초안 구현 완료 — shadcn/ui 14개 컴포넌트 설치, Toast→Sonner 대체, globals.css에 Kraftly 테마 적용, Tailwind CSS v4 + tw-animate-css 적용 |
 | 2026-02-11 | Google Stitch UI 분석 적용 — 다크 테마 팔레트 추가, AI Studio 레이아웃 재설계 (플로팅 프롬프트 바), 표면 계층 시스템 도입, shadcn/ui 확장 계획 (12개 컴포넌트 추가 예정), 애니메이션/트랜지션 가이드 추가, 다크 모드 CSS 토큰 정의 |
+| 2026-02-12 | Stitch 스타일 UI/UX 구현 완료 — globals.css `.dark` 클래스 + M3 Surface Container 토큰 구현, AI Studio 다크 몰입형 워크스페이스 (플로팅 프롬프트 바, 카테고리 그리드, 칩 선택기), Header/Footer Studio 조건부 숨김, 랜딩·갤러리·상세·Auth 페이지 전체 UI 개선, gold-glow 유틸리티 클래스 |
