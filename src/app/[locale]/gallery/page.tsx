@@ -10,15 +10,15 @@ import { useState } from "react";
 import { Link } from "@/i18n/navigation";
 import { useLocale } from "next-intl";
 import type { JewelryType } from "@/types";
+import { cn } from "@/lib/utils";
 
-// 초안용 목(mock) 데이터 — Supabase 연결 후 교체 예정
 const MOCK_DESIGNS = K_DESIGN_CATEGORIES.flatMap((cat, catIdx) =>
   Array.from({ length: 3 }).map((_, i) => ({
     id: `mock-${cat.id}-${i}`,
     category_id: cat.id,
-    jewelry_type: (["ring", "necklace", "earring", "bracelet", "brooch"] as JewelryType[])[
-      (catIdx + i) % 5
-    ],
+    jewelry_type: (
+      ["ring", "necklace", "earring", "bracelet", "brooch"] as JewelryType[]
+    )[(catIdx + i) % 5],
     likes_count: Math.floor(Math.random() * 50) + 5,
     image_url: null as string | null,
     color: cat.color_palette[i % 4],
@@ -41,9 +41,9 @@ export default function GalleryPage() {
   );
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-8 md:px-8 md:py-12">
+    <div className="mx-auto max-w-6xl px-4 py-10 md:px-8 md:py-14">
       {/* 타이틀 */}
-      <h1 className="text-center font-serif text-3xl font-bold text-navy md:text-4xl">
+      <h1 className="text-center font-serif text-3xl font-bold tracking-tight text-navy md:text-4xl">
         {t("title")}
       </h1>
 
@@ -54,7 +54,12 @@ export default function GalleryPage() {
           <Button
             variant={activeCategory === "all" ? "default" : "outline"}
             size="sm"
-            className="rounded-full"
+            className={cn(
+              "rounded-full text-xs",
+              activeCategory === "all"
+                ? "bg-gold text-white hover:bg-gold/90"
+                : "border-warm-border hover:border-gold/30"
+            )}
             onClick={() => setActiveCategory("all")}
           >
             {t("allCategories")}
@@ -64,7 +69,12 @@ export default function GalleryPage() {
               key={cat.id}
               variant={activeCategory === cat.id ? "default" : "outline"}
               size="sm"
-              className="rounded-full"
+              className={cn(
+                "rounded-full text-xs",
+                activeCategory === cat.id
+                  ? "bg-gold text-white hover:bg-gold/90"
+                  : "border-warm-border hover:border-gold/30"
+              )}
               onClick={() => setActiveCategory(cat.id)}
             >
               {locale === "ko" ? cat.name_ko : cat.name_en}
@@ -77,21 +87,27 @@ export default function GalleryPage() {
           value={sort}
           onValueChange={(v) => setSort(v as "latest" | "popular")}
         >
-          <TabsList>
-            <TabsTrigger value="latest">{t("sortLatest")}</TabsTrigger>
-            <TabsTrigger value="popular">{t("sortPopular")}</TabsTrigger>
+          <TabsList className="bg-muted/50">
+            <TabsTrigger value="latest" className="text-xs">
+              {t("sortLatest")}
+            </TabsTrigger>
+            <TabsTrigger value="popular" className="text-xs">
+              {t("sortPopular")}
+            </TabsTrigger>
           </TabsList>
         </Tabs>
       </div>
 
       {/* 갤러리 그리드 */}
       {sortedDesigns.length === 0 ? (
-        <div className="mt-20 text-center">
-          <Sparkles className="mx-auto h-12 w-12 text-muted-foreground/30" />
-          <p className="mt-4 text-muted-foreground">{t("noDesigns")}</p>
+        <div className="mt-24 text-center">
+          <Sparkles className="mx-auto h-12 w-12 text-muted-foreground/20" />
+          <p className="mt-4 text-sm text-muted-foreground">
+            {t("noDesigns")}
+          </p>
         </div>
       ) : (
-        <div className="mt-8 columns-2 gap-4 md:columns-3 lg:columns-4">
+        <div className="mt-8 columns-2 gap-3 md:columns-3 lg:columns-4">
           {sortedDesigns.map((design) => {
             const category = K_DESIGN_CATEGORIES.find(
               (c) => c.id === design.category_id
@@ -106,19 +122,19 @@ export default function GalleryPage() {
               <Link
                 key={design.id}
                 href={`/design/${design.id}`}
-                className="group mb-4 block break-inside-avoid overflow-hidden rounded-2xl bg-card shadow-sm transition-shadow hover:shadow-md"
+                className="group mb-3 block break-inside-avoid overflow-hidden rounded-2xl border border-warm-border/40 bg-card transition-all duration-300 hover:border-gold/20 hover:shadow-lg hover:shadow-gold/5"
               >
                 {/* 이미지 (플레이스홀더) */}
                 <div
-                  className="flex items-center justify-center"
+                  className="relative flex items-center justify-center overflow-hidden"
                   style={{
                     aspectRatio:
                       design.jewelry_type === "necklace" ? "3/4" : "1/1",
-                    background: `linear-gradient(135deg, ${design.color}20, ${category?.color_palette[1] || "#E5E2DC"}30)`,
+                    background: `linear-gradient(135deg, ${design.color}15, ${category?.color_palette[1] || "#E5E2DC"}22)`,
                   }}
                 >
                   <Sparkles
-                    className="h-8 w-8 opacity-20 transition-opacity group-hover:opacity-40"
+                    className="h-8 w-8 opacity-15 transition-all duration-300 group-hover:scale-110 group-hover:opacity-30"
                     style={{ color: design.color }}
                   />
                 </div>
@@ -128,15 +144,12 @@ export default function GalleryPage() {
                   <div className="flex items-center justify-between">
                     <Badge
                       variant="secondary"
-                      className="text-xs"
-                      style={{
-                        backgroundColor: design.color + "15",
-                        color: design.color,
-                      }}
+                      className="rounded-md bg-transparent px-0 text-[11px] font-medium"
+                      style={{ color: design.color }}
                     >
                       {catName}
                     </Badge>
-                    <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                    <div className="flex items-center gap-1 text-[11px] text-muted-foreground/60">
                       <Heart className="h-3 w-3" />
                       <span>{design.likes_count}</span>
                     </div>

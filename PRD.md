@@ -28,28 +28,34 @@
 
 | 영역 | 기술 | 버전/비고 |
 |------|------|-----------|
-| Framework | Next.js (App Router) | 14+ |
-| Language | TypeScript | strict 모드 |
-| Styling | Tailwind CSS | 3.x |
-| UI 컴포넌트 | shadcn/ui | 최신 |
+| Framework | Next.js (App Router) | 16.1.6 |
+| Language | TypeScript | 5.x, strict 모드 |
+| Runtime | React | 19.2.3 |
+| Styling | Tailwind CSS | v4 (@tailwindcss/postcss) |
+| UI 컴포넌트 | shadcn/ui | 최신 (Sonner 사용, Toast deprecated) |
 | Database | Supabase (PostgreSQL) | Auth + Storage + Realtime 포함 |
-| AI 이미지 생성 | Replicate API | SDXL 또는 Flux 1.1 Pro |
-| 상태 관리 | Zustand | - |
-| 국제화 | next-intl | en, ko, ja, zh |
+| AI 이미지 생성 | Replicate API | Flux 1.1 Pro |
+| 상태 관리 | Zustand | 5.0.11 |
+| 국제화 | next-intl | 4.8.2 (Phase 1: en, ko) |
 | 결제 | Stripe | Phase 2 |
 | 번역 채팅 | Google Translate API 또는 DeepL | Phase 2 |
 | AR | GlamAR 또는 Banuba WebAR | Phase 3 |
-| 배포 | Vercel | - |
-| 도메인 | kraftly.co (가칭) | - |
+| 배포 | Vercel | 배포 완료 |
+| GitHub | github.com/yonghot/kraftly | - |
+| 배포 URL | kraftly-ashen.vercel.app | - |
+| 도메인 | kraftly.co (가칭) | 미연결 |
 
 ---
 
 ## 3. 프로젝트 초기화
 
 ```bash
+# Next.js 16은 대문자 폴더명을 허용하지 않으므로 소문자로 생성 후 파일 복사
 npx create-next-app@latest kraftly --typescript --tailwind --app --src-dir
 cd kraftly
 npx shadcn@latest init
+# Toast는 deprecated → Sonner 사용
+npx shadcn add button card input select dialog skeleton avatar badge tabs dropdown-menu scroll-area progress sonner separator
 npm install @supabase/supabase-js @supabase/ssr replicate next-intl zustand
 ```
 
@@ -202,15 +208,16 @@ npm install @supabase/supabase-js @supabase/ssr replicate next-intl zustand
 
 ## 8. Phase별 개발 범위
 
-### Phase 1: AI Design Prototype (킬러 기능)
-- 랜딩 페이지 (반응형, 영문)
-- K-Design AI Studio — 카테고리 선택 → AI 이미지 4장 생성
-- 디자인 DB 저장 + 갤러리 공개
-- Supabase Auth (이메일 로그인)
-- 비로그인 하루 2회 생성
-- Vercel 배포, 커스텀 도메인
-- 모바일 반응형
-- 한국어/영어 전환 (next-intl)
+### Phase 1: AI Design Prototype (킬러 기능) — ✅ 초안 개발 완료 (2026-02-11)
+- ✅ 랜딩 페이지 (반응형, 영문 UI)
+- ✅ K-Design AI Studio — 카테고리 선택 → AI 이미지 4장 생성 (Replicate API 연동 + 플레이스홀더 폴백)
+- ⬜ 디자인 DB 저장 + 갤러리 공개 (API 스텁 구현, Supabase 연동 대기)
+- ⬜ Supabase Auth (이메일 로그인) — UI 구현 완료, Auth 연동 대기
+- ⬜ 비로그인 하루 2회 생성 — Rate Limiting 미구현
+- ✅ Vercel 배포 (kraftly-ashen.vercel.app)
+- ⬜ 커스텀 도메인 연결 — 미완료
+- ✅ 모바일 반응형
+- ✅ 한국어/영어 전환 (next-intl v4)
 
 ### Phase 2: Artisan Matching & Order System
 - 장인 프로필 등록/관리

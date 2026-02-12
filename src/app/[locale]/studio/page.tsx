@@ -3,20 +3,21 @@
 import { useTranslations } from "next-intl";
 import { useDesignStore } from "@/stores/design-store";
 import { K_DESIGN_CATEGORIES } from "@/data/categories";
-import { CategoryCard } from "@/components/design/category-card";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Badge } from "@/components/ui/badge";
 import {
   Sparkles,
   RefreshCw,
   Share2,
   ShoppingBag,
   Check,
+  ArrowLeft,
+  X,
 } from "lucide-react";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
+import { Link } from "@/i18n/navigation";
+import { useLocale } from "next-intl";
 import type { JewelryType, Material } from "@/types";
 import { cn } from "@/lib/utils";
 
@@ -40,6 +41,7 @@ export default function StudioPage() {
   const t = useTranslations("studio");
   const tj = useTranslations("jewelryTypes");
   const tm = useTranslations("materials");
+  const locale = useLocale();
 
   const {
     selectedCategory,
@@ -69,16 +71,16 @@ export default function StudioPage() {
 
   const canGenerate = selectedCategory && jewelryType && material;
 
-  // AI 이미지 생성 (API 호출)
   const handleGenerate = useCallback(async () => {
     if (!canGenerate) return;
 
     setGenerating(true);
     setProgress(0);
 
-    // 프로그레스 시뮬레이션
     const progressInterval = setInterval(() => {
-      setProgress(Math.min(90, useDesignStore.getState().generationProgress + Math.random() * 15));
+      setProgress(
+        Math.min(90, useDesignStore.getState().generationProgress + Math.random() * 15)
+      );
     }, 1500);
 
     try {
@@ -93,28 +95,24 @@ export default function StudioPage() {
         }),
       });
 
-      if (!res.ok) {
-        throw new Error("Generation failed");
-      }
+      if (!res.ok) throw new Error("Generation failed");
 
       const data = await res.json();
       setProgress(100);
       setGeneratedImages(data.images);
 
-      // 결과로 스크롤
       setTimeout(() => {
         resultsRef.current?.scrollIntoView({ behavior: "smooth" });
       }, 300);
     } catch {
-      // API가 아직 연결 안 된 경우 — 플레이스홀더 이미지 생성
       setProgress(100);
       const placeholders = Array.from({ length: 4 }).map(
         (_, i) =>
           `data:image/svg+xml,${encodeURIComponent(
             `<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
-              <rect width="512" height="512" fill="${selectedCategoryData?.color_palette[i % 4] || '#E5E2DC'}22"/>
-              <text x="256" y="240" text-anchor="middle" font-family="serif" font-size="20" fill="${selectedCategoryData?.color_palette[0] || '#1B3A5C'}">K-Design</text>
-              <text x="256" y="280" text-anchor="middle" font-family="sans-serif" font-size="14" fill="#6B7280">${selectedCategoryData?.name_en || 'Design'} #${i + 1}</text>
+              <rect width="512" height="512" fill="${selectedCategoryData?.color_palette[i % 4] || "#E5E2DC"}22"/>
+              <text x="256" y="240" text-anchor="middle" font-family="serif" font-size="20" fill="${selectedCategoryData?.color_palette[0] || "#1B3A5C"}">K-Design</text>
+              <text x="256" y="280" text-anchor="middle" font-family="sans-serif" font-size="14" fill="#6B7280">${selectedCategoryData?.name_en || "Design"} #${i + 1}</text>
             </svg>`
           )}`
       );
@@ -139,236 +137,303 @@ export default function StudioPage() {
     setGeneratedImages,
   ]);
 
-  // 카테고리 선택 시 배경 그라데이션 변경
-  const bgStyle = selectedCategoryData
-    ? {
-        background: `linear-gradient(180deg, ${selectedCategoryData.color_palette[0]}08 0%, transparent 40%)`,
-      }
-    : {};
-
   return (
-    <div className="min-h-screen" style={bgStyle}>
-      <div className="mx-auto max-w-5xl px-4 py-8 md:px-8 md:py-12">
-        {/* 타이틀 */}
-        <div className="mb-10 text-center">
-          <h1 className="font-serif text-3xl font-bold text-navy md:text-4xl">
-            {t("title")}
-          </h1>
+    <div className="dark flex h-[100dvh] flex-col bg-dark-bg">
+      {/* 미니 헤더 (Stitch 스타일) */}
+      <header className="flex h-14 flex-shrink-0 items-center justify-between border-b border-dark-border px-4">
+        <div className="flex items-center gap-3">
+          <Link
+            href="/"
+            className="flex items-center gap-2 rounded-lg p-1.5 text-dark-text-muted transition-colors hover:bg-dark-surface-high hover:text-dark-text"
+          >
+            <ArrowLeft className="h-4 w-4" />
+          </Link>
+          <div className="flex items-center gap-2">
+            <Sparkles className="h-4 w-4 text-dark-accent" />
+            <span className="font-serif text-sm font-semibold text-dark-text">
+              Kraftly
+            </span>
+          </div>
         </div>
+        <span className="text-xs font-medium text-dark-text-muted">
+          {t("title")}
+        </span>
+      </header>
 
-        {/* Step 1: 카테고리 선택 */}
-        <section className="mb-10">
-          <h2 className="mb-4 text-lg font-semibold text-navy">
-            <span className="mr-2 inline-flex h-7 w-7 items-center justify-center rounded-full bg-gold text-sm text-white">
-              1
-            </span>
-            {t("step1")}
-          </h2>
-
-          <div className="flex gap-4 overflow-x-auto pb-4 md:grid md:grid-cols-6 md:overflow-visible">
-            {K_DESIGN_CATEGORIES.map((category) => (
-              <div key={category.id} className="w-40 flex-shrink-0 md:w-auto">
-                <CategoryCard
-                  category={category}
-                  selected={selectedCategory === category.id}
-                  onClick={() => setCategory(category.id)}
-                />
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* Step 2: 디자인 상세 */}
-        <section className="mb-10">
-          <h2 className="mb-4 text-lg font-semibold text-navy">
-            <span className="mr-2 inline-flex h-7 w-7 items-center justify-center rounded-full bg-gold text-sm text-white">
-              2
-            </span>
-            {t("step2")}
-          </h2>
-
-          <div className="rounded-2xl bg-card p-6 shadow-sm">
-            {/* Jewelry Type */}
-            <div className="mb-6">
-              <label className="mb-2 block text-sm font-medium text-navy">
-                {t("jewelryType")}
-              </label>
-              <div className="flex flex-wrap gap-2">
-                {JEWELRY_TYPES.map((type) => (
+      {/* 캔버스 영역 (스크롤 가능) */}
+      <div className="flex-1 overflow-y-auto">
+        <div className="mx-auto max-w-4xl px-4 py-6 md:px-8 md:py-10">
+          {/* 카테고리 선택 */}
+          <section className="mb-8">
+            <h2 className="mb-4 text-sm font-medium text-dark-text-muted">
+              {t("step1")}
+            </h2>
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-6">
+              {K_DESIGN_CATEGORIES.map((category) => {
+                const name =
+                  locale === "ko" ? category.name_ko : category.name_en;
+                const isSelected = selectedCategory === category.id;
+                return (
                   <button
-                    key={type.value}
-                    onClick={() => setJewelryType(type.value)}
+                    key={category.id}
+                    onClick={() => setCategory(category.id)}
                     className={cn(
-                      "rounded-xl border px-4 py-2 text-sm transition-all",
-                      jewelryType === type.value
-                        ? "border-gold bg-gold/10 font-medium text-gold"
-                        : "border-warm-border text-muted-foreground hover:border-gold/50"
+                      "group relative flex aspect-[3/4] flex-col justify-end overflow-hidden rounded-xl border transition-all duration-300",
+                      isSelected
+                        ? "border-dark-accent gold-glow"
+                        : "border-dark-border hover:border-dark-surface-highest"
                     )}
+                    style={{
+                      background: `linear-gradient(135deg, ${category.color_palette[0]}18, ${category.color_palette[1]}25, ${category.color_palette[2]}15)`,
+                    }}
                   >
-                    {tj(type.labelKey)}
-                  </button>
-                ))}
-              </div>
-            </div>
+                    {/* 컬러 오브 */}
+                    <div className="absolute inset-0 overflow-hidden">
+                      {category.color_palette.slice(0, 3).map((color, i) => (
+                        <div
+                          key={i}
+                          className="absolute rounded-full opacity-15 blur-2xl transition-opacity group-hover:opacity-25"
+                          style={{
+                            backgroundColor: color,
+                            width: `${50 + i * 15}px`,
+                            height: `${50 + i * 15}px`,
+                            top: `${15 + i * 20}%`,
+                            left: `${10 + i * 25}%`,
+                          }}
+                        />
+                      ))}
+                    </div>
 
-            {/* Material */}
-            <div className="mb-6">
-              <label className="mb-2 block text-sm font-medium text-navy">
-                {t("material")}
-              </label>
-              <div className="flex flex-wrap gap-2">
-                {MATERIALS.map((mat) => (
-                  <button
-                    key={mat.value}
-                    onClick={() => setMaterial(mat.value)}
-                    className={cn(
-                      "rounded-xl border px-4 py-2 text-sm transition-all",
-                      material === mat.value
-                        ? "border-gold bg-gold/10 font-medium text-gold"
-                        : "border-warm-border text-muted-foreground hover:border-gold/50"
+                    {/* 하단 텍스트 */}
+                    <div className="relative z-10 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-3 pt-12">
+                      <h3 className="text-xs font-semibold text-white">
+                        {name}
+                      </h3>
+                    </div>
+
+                    {/* 선택 표시 */}
+                    {isSelected && (
+                      <div className="absolute right-2 top-2 flex h-5 w-5 items-center justify-center rounded-full bg-dark-accent">
+                        <Check className="h-3 w-3 text-dark-bg" />
+                      </div>
                     )}
-                  >
-                    {tm(mat.labelKey)}
                   </button>
-                ))}
-              </div>
+                );
+              })}
             </div>
+          </section>
 
-            {/* Additional Prompt */}
-            <div>
-              <label className="mb-2 block text-sm font-medium text-navy">
-                {t("additionalDetails")}
-              </label>
-              <Input
-                value={userPrompt}
-                onChange={(e) =>
-                  setUserPrompt(e.target.value.slice(0, 200))
-                }
-                placeholder={t("additionalPlaceholder")}
-                className="rounded-xl"
-                maxLength={200}
-              />
-              <p className="mt-1 text-right text-xs text-muted-foreground">
-                {userPrompt.length}/200
-              </p>
-            </div>
+          {/* 디자인 옵션 (카테고리 선택 후 표시) */}
+          {selectedCategory && (
+            <section className="mb-8 animate-in fade-in slide-in-from-bottom-2 duration-300">
+              <h2 className="mb-4 text-sm font-medium text-dark-text-muted">
+                {t("step2")}
+              </h2>
+
+              <div className="rounded-xl border border-dark-border bg-dark-surface p-5">
+                {/* Jewelry Type */}
+                <div className="mb-5">
+                  <label className="mb-2.5 block text-xs font-medium text-dark-text-muted">
+                    {t("jewelryType")}
+                  </label>
+                  <div className="flex flex-wrap gap-2">
+                    {JEWELRY_TYPES.map((type) => (
+                      <button
+                        key={type.value}
+                        onClick={() => setJewelryType(type.value)}
+                        className={cn(
+                          "rounded-lg border px-3.5 py-1.5 text-xs font-medium transition-all",
+                          jewelryType === type.value
+                            ? "border-dark-accent/50 bg-dark-accent/15 text-dark-accent"
+                            : "border-dark-border text-dark-text-muted hover:border-dark-surface-highest hover:text-dark-text"
+                        )}
+                      >
+                        {tj(type.labelKey)}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Material */}
+                <div>
+                  <label className="mb-2.5 block text-xs font-medium text-dark-text-muted">
+                    {t("material")}
+                  </label>
+                  <div className="flex flex-wrap gap-2">
+                    {MATERIALS.map((mat) => (
+                      <button
+                        key={mat.value}
+                        onClick={() => setMaterial(mat.value)}
+                        className={cn(
+                          "rounded-lg border px-3.5 py-1.5 text-xs font-medium transition-all",
+                          material === mat.value
+                            ? "border-dark-accent/50 bg-dark-accent/15 text-dark-accent"
+                            : "border-dark-border text-dark-text-muted hover:border-dark-surface-highest hover:text-dark-text"
+                        )}
+                      >
+                        {tm(mat.labelKey)}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </section>
+          )}
+
+          {/* 생성 결과 */}
+          {(generatedImages.length > 0 || isGenerating) && (
+            <section ref={resultsRef} className="mb-8 animate-in fade-in duration-300">
+              <h2 className="mb-4 text-sm font-medium text-dark-text-muted">
+                {t("step3")}
+              </h2>
+
+              {/* 프로그레스 바 */}
+              {isGenerating && (
+                <div className="mb-4">
+                  <Progress
+                    value={generationProgress}
+                    className="h-1 bg-dark-surface-high [&>div]:bg-dark-accent [&>div]:shadow-[0_0_10px_rgba(212,184,122,0.3)]"
+                  />
+                  <p className="mt-2 text-center text-xs text-dark-text-muted">
+                    {t("generating")}
+                  </p>
+                </div>
+              )}
+
+              {/* 이미지 그리드 */}
+              <div className="grid grid-cols-2 gap-3">
+                {isGenerating && generatedImages.length === 0
+                  ? Array.from({ length: 4 }).map((_, i) => (
+                      <Skeleton
+                        key={i}
+                        className="aspect-square rounded-xl bg-dark-surface-mid"
+                      />
+                    ))
+                  : generatedImages.map((img, i) => (
+                      <button
+                        key={i}
+                        onClick={() => selectImage(i)}
+                        className={cn(
+                          "group relative aspect-square overflow-hidden rounded-xl border transition-all duration-200",
+                          selectedImageIndex === i
+                            ? "border-dark-accent gold-glow"
+                            : "border-dark-border hover:border-dark-surface-highest"
+                        )}
+                      >
+                        <img
+                          src={img}
+                          alt={`Design ${i + 1}`}
+                          className="h-full w-full object-cover"
+                        />
+                        {selectedImageIndex === i && (
+                          <div className="absolute inset-0 flex items-center justify-center bg-dark-accent/15">
+                            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-dark-accent">
+                              <Check className="h-4 w-4 text-dark-bg" />
+                            </div>
+                          </div>
+                        )}
+                        <div className="absolute bottom-2 left-2">
+                          <span className="rounded-md bg-black/60 px-2 py-0.5 text-[10px] font-medium text-white/80 backdrop-blur-sm">
+                            #{i + 1}
+                          </span>
+                        </div>
+                      </button>
+                    ))}
+              </div>
+
+              {/* 선택 후 액션 */}
+              {selectedImageIndex !== null && (
+                <div className="mt-5 flex flex-wrap justify-center gap-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="rounded-lg border-dark-border bg-transparent text-dark-text-muted hover:bg-dark-surface-high hover:text-dark-text"
+                    onClick={handleGenerate}
+                  >
+                    <RefreshCw className="mr-1.5 h-3.5 w-3.5" />
+                    {t("regenerate")}
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="rounded-lg border-dark-border bg-transparent text-dark-text-muted hover:bg-dark-surface-high hover:text-dark-text"
+                    onClick={() => setShared(true)}
+                  >
+                    <Share2 className="mr-1.5 h-3.5 w-3.5" />
+                    {shared ? "Shared!" : t("shareToGallery")}
+                  </Button>
+                  <Button
+                    size="sm"
+                    className="rounded-lg bg-dark-surface-high text-dark-text-muted"
+                    disabled
+                  >
+                    <ShoppingBag className="mr-1.5 h-3.5 w-3.5" />
+                    {t("findArtisan")}
+                    <span className="ml-1 text-[10px] opacity-60">(Phase 2)</span>
+                  </Button>
+                </div>
+              )}
+            </section>
+          )}
+        </div>
+      </div>
+
+      {/* 플로팅 프롬프트 바 (Stitch 스타일) */}
+      <div className="flex-shrink-0 border-t border-dark-border bg-dark-bg px-4 pb-6 pt-4">
+        {/* 선택된 옵션 칩 */}
+        {(selectedCategory || jewelryType || material) && (
+          <div className="mx-auto mb-3 flex max-w-2xl flex-wrap gap-1.5">
+            {selectedCategoryData && (
+              <span className="inline-flex items-center gap-1 rounded-md bg-dark-surface-mid px-2 py-0.5 text-[11px] font-medium text-dark-text-muted">
+                {locale === "ko"
+                  ? selectedCategoryData.name_ko
+                  : selectedCategoryData.name_en}
+              </span>
+            )}
+            {jewelryType && (
+              <span className="inline-flex items-center gap-1 rounded-md bg-dark-surface-mid px-2 py-0.5 text-[11px] font-medium text-dark-text-muted">
+                {tj(jewelryType)}
+              </span>
+            )}
+            {material && (
+              <span className="inline-flex items-center gap-1 rounded-md bg-dark-surface-mid px-2 py-0.5 text-[11px] font-medium text-dark-text-muted">
+                {tm(material)}
+              </span>
+            )}
           </div>
-        </section>
+        )}
 
-        {/* Generate 버튼 */}
-        <div className="mb-10 text-center">
+        {/* 프롬프트 입력 + 생성 버튼 */}
+        <div className="mx-auto flex max-w-2xl items-center gap-3 rounded-2xl border border-dark-border bg-dark-surface-mid px-4 py-3">
+          <input
+            type="text"
+            value={userPrompt}
+            onChange={(e) => setUserPrompt(e.target.value.slice(0, 200))}
+            placeholder={t("additionalPlaceholder")}
+            maxLength={200}
+            className="flex-1 bg-transparent text-sm text-dark-text placeholder:text-dark-text-muted/50 focus:outline-none"
+          />
           <Button
-            size="lg"
+            size="sm"
             onClick={handleGenerate}
             disabled={!canGenerate || isGenerating}
-            className="rounded-xl bg-gold px-12 py-6 text-lg font-semibold text-white shadow-lg shadow-gold/30 transition-all hover:bg-gold/90 hover:shadow-xl disabled:opacity-50"
+            className={cn(
+              "rounded-xl px-5 font-semibold transition-all",
+              canGenerate
+                ? "bg-dark-accent text-dark-bg hover:bg-dark-accent/90 gold-glow"
+                : "bg-dark-surface-high text-dark-text-muted"
+            )}
           >
             {isGenerating ? (
-              <>
-                <RefreshCw className="mr-2 h-5 w-5 animate-spin" />
-                {t("generating")}
-              </>
+              <RefreshCw className="h-4 w-4 animate-spin" />
             ) : (
               <>
-                <Sparkles className="mr-2 h-5 w-5" />
+                <Sparkles className="mr-1.5 h-3.5 w-3.5" />
                 {t("generate")}
               </>
             )}
           </Button>
-
-          {/* 프로그레스 바 */}
-          {isGenerating && (
-            <div className="mx-auto mt-4 max-w-md">
-              <Progress value={generationProgress} className="h-2" />
-              <p className="mt-2 text-sm text-muted-foreground">
-                {t("generating")}
-              </p>
-            </div>
-          )}
         </div>
-
-        {/* Step 3: 생성 결과 */}
-        {(generatedImages.length > 0 || isGenerating) && (
-          <section ref={resultsRef} className="mb-10">
-            <h2 className="mb-4 text-lg font-semibold text-navy">
-              <span className="mr-2 inline-flex h-7 w-7 items-center justify-center rounded-full bg-gold text-sm text-white">
-                3
-              </span>
-              {t("step3")}
-            </h2>
-
-            {/* 이미지 그리드 */}
-            <div className="grid grid-cols-2 gap-4">
-              {isGenerating && generatedImages.length === 0
-                ? Array.from({ length: 4 }).map((_, i) => (
-                    <Skeleton
-                      key={i}
-                      className="aspect-square rounded-2xl"
-                    />
-                  ))
-                : generatedImages.map((img, i) => (
-                    <button
-                      key={i}
-                      onClick={() => selectImage(i)}
-                      className={cn(
-                        "group relative aspect-square overflow-hidden rounded-2xl border-2 transition-all",
-                        selectedImageIndex === i
-                          ? "border-gold shadow-lg shadow-gold/20"
-                          : "border-transparent hover:border-gold/30"
-                      )}
-                    >
-                      <img
-                        src={img}
-                        alt={`Design ${i + 1}`}
-                        className="h-full w-full object-cover"
-                      />
-                      {selectedImageIndex === i && (
-                        <div className="absolute inset-0 flex items-center justify-center bg-gold/20">
-                          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gold text-white">
-                            <Check className="h-5 w-5" />
-                          </div>
-                        </div>
-                      )}
-                      <div className="absolute bottom-2 left-2">
-                        <Badge variant="secondary" className="bg-white/80 text-xs">
-                          #{i + 1}
-                        </Badge>
-                      </div>
-                    </button>
-                  ))}
-            </div>
-
-            {/* 선택 후 액션 버튼 */}
-            {selectedImageIndex !== null && (
-              <div className="mt-6 flex flex-wrap justify-center gap-3">
-                <Button
-                  variant="outline"
-                  className="rounded-xl"
-                  onClick={handleGenerate}
-                >
-                  <RefreshCw className="mr-2 h-4 w-4" />
-                  {t("regenerate")}
-                </Button>
-                <Button
-                  variant="outline"
-                  className="rounded-xl"
-                  onClick={() => setShared(true)}
-                >
-                  <Share2 className="mr-2 h-4 w-4" />
-                  {shared ? "Shared!" : t("shareToGallery")}
-                </Button>
-                <Button
-                  className="rounded-xl bg-navy text-white hover:bg-navy/90"
-                  disabled
-                >
-                  <ShoppingBag className="mr-2 h-4 w-4" />
-                  {t("findArtisan")}
-                  <span className="ml-1 text-xs opacity-70">(Phase 2)</span>
-                </Button>
-              </div>
-            )}
-          </section>
-        )}
       </div>
     </div>
   );

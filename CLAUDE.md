@@ -63,15 +63,20 @@
 ## 4. 프로젝트 기술 스택
 
 ```
-Frontend:  Next.js 14+ (App Router) + TypeScript + Tailwind CSS + shadcn/ui
+Frontend:  Next.js 16 (App Router) + TypeScript 5 + Tailwind CSS v4 + shadcn/ui
 Backend:   Next.js API Routes
 Database:  Supabase (PostgreSQL + Auth + Storage + Realtime)
-AI:        Replicate API (SDXL / Flux)
-State:     Zustand
-i18n:      next-intl (en, ko, ja, zh)
+AI:        Replicate API (Flux 1.1 Pro)
+State:     Zustand 5
+i18n:      next-intl v4 (en, ko) — Phase 4에서 ja, zh 추가 예정
 Deploy:    Vercel
+Runtime:   React 19
 Payment:   Stripe (Phase 2)
 ```
+
+### 배포 정보
+- **GitHub**: https://github.com/yonghot/kraftly
+- **Vercel**: https://kraftly-ashen.vercel.app
 
 ---
 
@@ -116,7 +121,12 @@ src/
 
 > 발견된 문제와 근본 해결책을 기록합니다. 새로운 이슈 해결 시 여기에 추가합니다.
 
-*(프로젝트 시작 전 — 아직 기록 없음)*
+| # | 문제 | 원인 | 해결 |
+|---|------|------|------|
+| 1 | `create-next-app`이 대문자 폴더명("Kraftly")에서 실패 | Next.js CLI가 프로젝트명에 대문자를 허용하지 않음 | 임시 폴더(`kraftly-temp`)에 생성 후 파일 복사 |
+| 2 | `shadcn add toast` 실패 | Toast 컴포넌트가 deprecated됨 | `sonner` 컴포넌트로 대체 |
+| 3 | Vercel link 시 대문자 프로젝트명 거부 | Vercel 프로젝트명은 소문자만 허용 | `--project=kraftly` 옵션으로 소문자 지정 |
+| 4 | Windows 환경에서 `xcopy` 명령 실패 | bash 환경에서 Windows 전용 명령 호환성 문제 | PowerShell `Copy-Item` 명령으로 대체 |
 
 ---
 

@@ -52,11 +52,23 @@
   --color-warm-white: #FAFAF8;
   --color-warm-border: #E5E2DC;
   --color-warm-muted: #F5F0E8;
+
+  /* 다크 테마 Surface Container (M3 패턴) */
+  --color-dark-bg: #121214;
+  --color-dark-surface: #1C1C1F;
+  --color-dark-surface-low: #18181B;
+  --color-dark-surface-mid: #232326;
+  --color-dark-surface-high: #2A2A2E;
+  --color-dark-surface-highest: #333338;
+  --color-dark-border: #3A3A3F;
+  --color-dark-text: #F0EDE8;
+  --color-dark-text-muted: #9CA3AF;
+  --color-dark-accent: #D4B87A;
 }
 
 :root {
   --radius: 0.75rem;
-  /* Kraftly 테마 컬러 */
+  /* Kraftly 라이트 테마 */
   --background: #FAFAF8;
   --foreground: #1A1A1A;
   --card: #FFFFFF;
@@ -90,6 +102,41 @@
   --sidebar-ring: #C9A96E;
 }
 
+/* Stitch 영감 다크 테마 */
+.dark {
+  --background: #121214;
+  --foreground: #F0EDE8;
+  --card: #1C1C1F;
+  --card-foreground: #F0EDE8;
+  --popover: #1C1C1F;
+  --popover-foreground: #F0EDE8;
+  --primary: #D4B87A;
+  --primary-foreground: #121214;
+  --secondary: #4A7AAF;
+  --secondary-foreground: #F0EDE8;
+  --muted: #232326;
+  --muted-foreground: #9CA3AF;
+  --accent: #2A2A2E;
+  --accent-foreground: #F0EDE8;
+  --destructive: #F87171;
+  --border: #3A3A3F;
+  --input: #3A3A3F;
+  --ring: #D4B87A;
+  --chart-1: #D4B87A;
+  --chart-2: #4A7AAF;
+  --chart-3: #34D399;
+  --chart-4: #F87171;
+  --chart-5: #A78BFA;
+  --sidebar: #1C1C1F;
+  --sidebar-foreground: #F0EDE8;
+  --sidebar-primary: #D4B87A;
+  --sidebar-primary-foreground: #121214;
+  --sidebar-accent: #2A2A2E;
+  --sidebar-accent-foreground: #F0EDE8;
+  --sidebar-border: #3A3A3F;
+  --sidebar-ring: #D4B87A;
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
@@ -97,5 +144,35 @@
   body {
     @apply bg-background text-foreground;
     font-feature-settings: "rlig" 1, "calt" 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
+}
+
+/* Stitch 스타일 스크롤바 (다크 테마) */
+.dark ::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.dark ::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: #3A3A3F;
+  border-radius: 3px;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #4A4A50;
+}
+
+/* 골드 글로우 효과 */
+.gold-glow {
+  box-shadow: 0 0 20px rgba(212, 184, 122, 0.15);
+}
+
+.gold-glow-strong {
+  box-shadow: 0 0 30px rgba(212, 184, 122, 0.25);
 }
