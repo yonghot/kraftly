@@ -66,12 +66,12 @@
 Frontend:  Next.js 16 (App Router) + TypeScript 5 + Tailwind CSS v4 + shadcn/ui
 Backend:   Next.js API Routes
 Database:  Supabase (PostgreSQL + Auth + Storage + Realtime)
-AI:        Google Gemini API (1순위) → Replicate API (2순위) → Pollinations.ai (3순위, 무료 폴백)
+AI:        Google Gemini API (gemini-2.5-flash-image) — 단독 사용
 State:     Zustand 5
 i18n:      next-intl v4 (en, ko) — Phase 4에서 ja, zh 추가 예정
 Deploy:    Vercel
 Runtime:   React 19
-Testing:   Jest + @testing-library/react (58 tests, 10 suites)
+Testing:   Jest + @testing-library/react (62 tests, 11 suites)
 Payment:   Stripe (Phase 2)
 ```
 
@@ -92,6 +92,11 @@ src/
 │   │   ├── studio/         # AI Studio
 │   │   ├── gallery/        # 갤러리
 │   │   ├── design/[id]/    # 디자인 상세
+│   │   ├── artisans/       # 장인 매칭 (Mock 프로토타입)
+│   │   │   ├── page.tsx    # 장인 전체 목록
+│   │   │   ├── [id]/       # 장인 상세 프로필
+│   │   │   ├── match/      # 매칭 결과
+│   │   │   └── quote/      # 견적 요청
 │   │   ├── auth/           # 로그인/회원가입
 │   │   └── my/             # 사용자 개인 영역
 │   └── api/                # API Routes
@@ -99,14 +104,17 @@ src/
 │       └── designs/        # 디자인 CRUD
 ├── components/             # 공유 UI 컴포넌트
 │   ├── ui/                 # shadcn/ui 컴포넌트
+│   ├── artisan/            # 장인 관련 (artisan-card, artisan-filters, quote-form)
+│   ├── design/             # 디자인 관련 (order-button)
 │   └── [feature]/          # 기능별 컴포넌트
 ├── lib/                    # 유틸리티, 설정
 │   ├── supabase/           # Supabase 클라이언트
+│   ├── matching.ts         # 장인 매칭 알고리즘
 │   └── utils.ts
 ├── hooks/                  # 커스텀 훅
-├── stores/                 # Zustand 스토어
+├── stores/                 # Zustand 스토어 (design-store, artisan-store)
 ├── types/                  # TypeScript 타입 정의
-├── data/                   # 시드 데이터, 상수
+├── data/                   # 시드 데이터, 상수 (categories, artisans)
 └── messages/               # i18n 번역 파일
     ├── en.json
     └── ko.json
@@ -131,6 +139,8 @@ src/
 | 5 | AI Studio 다크 모드에 `next-themes` 불필요 | Studio만 다크 테마가 필요하고 전역 테마 전환은 Phase 1 범위 밖 | `.dark` CSS 클래스를 Studio 페이지 wrapper에 직접 적용 + `@custom-variant dark` 활용 |
 | 6 | Studio에서 Header/Footer 숨기기 | 레이아웃 구조 변경 없이 조건부 렌더링 필요 | `usePathname()`으로 `/studio` 경로 감지 시 `null` 반환 |
 | 7 | `git push` 후 Vercel 자동 배포 안 됨 | CLI(`vercel --prod`)로 수동 배포하여 Git Integration이 미설정 | 배포 시 `npx vercel --prod` 수동 실행 필요. 또는 Vercel 대시보드에서 GitHub 저장소 연결 설정 |
+| 8 | AI 이미지 생성 시 Pollinations.ai 광고 이미지 표시 | 3단계 폴백(Gemini→Replicate→Pollinations) 중 Gemini 실패 시 Pollinations.ai가 서비스 이전하여 "WE HAVE MOVED" 광고 반환 | Replicate/Pollinations 폴백 코드 완전 제거, Gemini API 단독 사용으로 전환. 키 미설정 시 503, 생성 실패 시 502 반환 |
+| 9 | AI 이미지 생성 실패 (502 반환) | `gemini-2.0-flash-exp` 모델의 이미지 생성 기능이 2025-11-18에 종료됨 | 모델을 `gemini-2.5-flash-image` (GA, 2025-10 출시)로 변경 |
 
 ---
 

@@ -200,6 +200,15 @@ text-dark-text text-base
 | HoverCard | 갤러리 디자인 미리보기 | — |
 | Carousel | 생성 이미지 모바일 슬라이드 | — |
 
+### 장인 매칭 Mock 구현 컴포넌트 (Phase 1에서 선행 구현)
+
+| 컴포넌트 | 위치 | 용도 |
+|----------|------|------|
+| ArtisanCard | `components/artisan/artisan-card.tsx` | 장인 카드 (아바타, 뱃지, 매칭 점수, 평점) |
+| ArtisanFilters | `components/artisan/artisan-filters.tsx` | 필터 칩 (specialty, material, location) |
+| QuoteForm | `components/artisan/quote-form.tsx` | 견적 요청 폼 (예산, 납기, 메모) |
+| OrderButton | `components/design/order-button.tsx` | 디자인 상세 → 매칭 연계 버튼 (Client Component) |
+
 ### Phase 2 추가 컴포넌트
 
 | 컴포넌트 | 용도 |
@@ -280,7 +289,7 @@ Tailwind 기본 브레이크포인트 사용:
   - `GALLERY_IMAGES`: 갤러리/상세 페이지용 (카테고리당 3장, 총 18장 — 각 카테고리 주제와 일치하는 이미지)
 - 이미지 비율: AI 생성 이미지 1:1, 카테고리 카드 3:4
 - 다크 테마 이미지 카드: `rounded-xl overflow-hidden` + 미묘한 `ring-1 ring-dark-border`
-- `next.config.ts`에 `images.unsplash.com` 도메인 등록
+- `next.config.ts` 이미지 도메인: `**.supabase.co`, `images.unsplash.com` (Replicate/Pollinations 도메인 제거 완료)
 
 ---
 
@@ -432,3 +441,5 @@ Tailwind CSS v4 + shadcn/ui 테마 커스터마이징 (`globals.css`):
 | 2026-02-12 | Stitch 스타일 UI/UX 구현 완료 — globals.css `.dark` 클래스 + M3 Surface Container 토큰 구현, AI Studio 다크 몰입형 워크스페이스 (플로팅 프롬프트 바, 카테고리 그리드, 칩 선택기), Header/Footer Studio 조건부 숨김, 랜딩·갤러리·상세·Auth 페이지 전체 UI 개선, gold-glow 유틸리티 클래스 |
 | 2026-02-12 | Pretendard 폰트 + 실사 이미지 전면 적용 — `--font-sans`를 Pretendard 최우선으로 변경, Unsplash 실사 이미지 전면 도입 (`src/data/images.ts` 중앙 관리), Hero 섹션 실사 배경 이미지 + 오버레이, Gallery/Category/Detail/Studio 모든 카드에 `next/image` 실사 이미지, 로고 폰트 `font-serif` → `tracking-tighter` (Pretendard 기반) |
 | 2026-02-12 | 이미지-카테고리 매칭 + AI 프롬프트 정교화 — 카테고리/갤러리 이미지 전수 검증 (Unsplash API), 불일치 이미지 교체 (마늘→자개, 나선계단→서울 등), AI 생성 1장으로 변경 (2→1), `JEWELRY_TYPE_DETAILS` 5종 형태 묘사 + `MATERIAL_DETAILS` 5종 소재 시각적 묘사 추가, CRITICAL 강제 지시문으로 주얼리 종류·소재 정확도 향상 |
+| 2026-02-12 | 장인 매칭 UI 구현 (Mock 프로토타입) — 장인 카드(아바타+뱃지+매칭 점수), 필터 칩(specialty/material/location), 견적 요청 폼, 매칭 결과 페이지(점수 breakdown 프로그레스 바), 장인 상세(Tabs: About/Portfolio/Reviews). 골드 색상 체계 일관 적용 (90%+ 골드 뱃지, 70%+ 실버 뱃지) |
+| 2026-02-12 | Pollinations.ai/Replicate 폴백 완전 제거 — Gemini API 단독 사용으로 전환, `next.config.ts`에서 replicate.delivery·pollinations.ai 이미지 도메인 제거 |

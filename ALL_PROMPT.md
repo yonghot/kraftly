@@ -42,3 +42,12 @@
 
 ### #012 — 2026-02-12
 `/sc:implement` 디자인을 2개 생성하지 말고, 1개만 생성하자. 그리고 웹사이트 전체에 걸쳐서 실사이미지와 항목이 일치하지 않는 경우가 너무 많아. 전부 찾아서 제대로 수정해줘. 그리고 히어로 섹션 배경도 적절한 실사 이미지로 바꿔줘
+
+### #013 — 2026-02-12
+장인 매칭 기능 구현 (Mock 프로토타입). 계획 승인 후 실행: 타입 추가(ArtisanProfile, MatchedArtisan, QuoteRequest 등) → Mock 데이터 8명 → 매칭 알고리즘(specialty 40%+material 25%+rating 20%+availability 15%) → Zustand store → i18n 메시지 → 컴포넌트 3개(artisan-card, artisan-filters, quote-form) → 페이지 4개(목록, 상세, 매칭 결과, 견적 요청) → OrderButton → 기존 파일 수정(Studio, Design 상세, Header, Footer) → 테스트(matching.test.ts)
+
+### #014 — 2026-02-12
+`/sc:troubleshoot` 왜 자꾸 이 무료 API의 이미지가 생성되지? 구글 제미나이 API만을 사용하고, 다른 API를 사용했던 흔적을 완벽하게 제거해줘 `--persona-analyzer --ultrathink --seq --c7`
+
+### #015 — 2026-02-12
+`/sc:document` 지금까지 작업한 내용을 반영이 '필요'한 모든 .md 파일들에 최신화시켜 줘 `--persona-architect --ultrathink --seq --c7`

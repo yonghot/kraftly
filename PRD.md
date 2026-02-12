@@ -34,7 +34,7 @@
 | Styling | Tailwind CSS | v4 (@tailwindcss/postcss) |
 | UI 컴포넌트 | shadcn/ui | 최신 (Sonner 사용, Toast deprecated) |
 | Database | Supabase (PostgreSQL) | Auth + Storage + Realtime 포함 |
-| AI 이미지 생성 | Google Gemini API (1순위) → Replicate API (2순위) → Pollinations.ai (3순위) | Gemini 2.0 Flash / Flux 1.1 Pro / 무료 폴백 |
+| AI 이미지 생성 | Google Gemini API (단독) | gemini-2.5-flash-image (GA), IMAGE+TEXT 모달리티 |
 | 상태 관리 | Zustand | 5.0.11 |
 | 국제화 | next-intl | 4.8.2 (Phase 1: en, ko) |
 | 결제 | Stripe | Phase 2 |
@@ -56,7 +56,7 @@ cd kraftly
 npx shadcn@latest init
 # Toast는 deprecated → Sonner 사용
 npx shadcn add button card input select dialog skeleton avatar badge tabs dropdown-menu scroll-area progress sonner separator
-npm install @supabase/supabase-js @supabase/ssr replicate next-intl zustand
+npm install @supabase/supabase-js @supabase/ssr @google/genai next-intl zustand
 ```
 
 ---
@@ -196,10 +196,10 @@ npm install @supabase/supabase-js @supabase/ssr replicate next-intl zustand
 **POST /api/generate** — AI 이미지 생성
 - Request: `{ category_id, jewelry_type, material, user_prompt? }`
 - 로직: 카테고리 prompt_template 조회 → 플레이스홀더 치환 → 주얼리 형태/소재 상세 묘사 보강 → user_prompt 추가 → AI API 호출(1장 생성) → 응답
-- AI 우선순위: (1) Gemini API (`GEMINI_API_KEY`) → (2) Replicate API (`REPLICATE_API_TOKEN`) → (3) Pollinations.ai (키 불필요, 무료 폴백)
+- AI: Google Gemini API 단독 사용 (`GEMINI_API_KEY` 필수, 미설정 시 503)
 - 프롬프트 보강: `JEWELRY_TYPE_DETAILS` (5종 형태 묘사) + `MATERIAL_DETAILS` (5종 소재 시각적 묘사) + CRITICAL 강제 지시문
 - Response: `{ images: string[], design_id: string, prompt_used: string }`
-- Replicate 파라미터: guidance_scale 7.5, num_inference_steps 30
+- 생성 실패 시 502 반환 (폴백 없음)
 
 **GET/POST /api/designs** — 디자인 CRUD
 
@@ -217,7 +217,7 @@ npm install @supabase/supabase-js @supabase/ssr replicate next-intl zustand
 - ✅ K-Design AI Studio — Google Stitch 스타일 다크 몰입형 워크스페이스 재설계 (플로팅 프롬프트 바, M3 Surface Container)
 - ✅ 갤러리 UI — 골드 필터 버튼, 카드 hover 효과, masonry 레이아웃 개선
 - ✅ 디자인 상세 / Auth 페이지 — 카드 기반 레이아웃 통일
-- ✅ 테스트 인프라 — Jest + Testing Library (58 tests, 10 suites 통과)
+- ✅ 테스트 인프라 — Jest + Testing Library (62 tests, 11 suites 통과)
 - ⬜ 디자인 DB 저장 + 갤러리 공개 (API 스텁 구현, Supabase 연동 대기)
 - ⬜ Supabase Auth (이메일 로그인) — UI 구현 완료, Auth 연동 대기
 - ⬜ 비로그인 하루 2회 생성 — Rate Limiting 미구현
@@ -227,8 +227,9 @@ npm install @supabase/supabase-js @supabase/ssr replicate next-intl zustand
 - ✅ 한국어/영어 전환 (next-intl v4)
 
 ### Phase 2: Artisan Matching & Order System
-- 장인 프로필 등록/관리
-- 장인 매칭 알고리즘 (규칙 기반: specialty 40% + material 25% + rating 20% + availability 15%)
+- ✅ 장인 매칭 Mock 프로토타입 구현 완료 (Mock 데이터 8명, 매칭 알고리즘, 4개 페이지, 3개 컴포넌트)
+- 장인 프로필 등록/관리 (Supabase 연동 대기)
+- 장인 매칭 알고리즘 (규칙 기반: specialty 40% + material 25% + rating 20% + availability 15%) — ✅ 순수 함수 구현 완료
 - 주문 Flow: 디자인 → 장인 선택 → 견적 → 결제 → 제작 → 배송 → 리뷰
 - Stripe 결제 (수수료 12%, 에스크로 패턴)
 - 자동 번역 채팅 (Google Translate 또는 DeepL + Supabase Realtime)
@@ -257,8 +258,6 @@ NEXT_PUBLIC_SUPABASE_URL=
 NEXT_PUBLIC_SUPABASE_ANON_KEY=
 SUPABASE_SERVICE_ROLE_KEY=
 GEMINI_API_KEY=
-REPLICATE_API_TOKEN=
-TOGETHER_API_KEY=
 NEXT_PUBLIC_APP_URL=https://kraftly.co
 NEXT_PUBLIC_DEFAULT_LOCALE=en
 
