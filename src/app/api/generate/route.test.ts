@@ -82,7 +82,7 @@ describe("POST /api/generate", () => {
   });
 
   describe("Pollinations.ai 폴백 (API 토큰 없음)", () => {
-    it("유효한 요청 시 Pollinations AI 이미지 URL 2장을 반환한다", async () => {
+    it("유효한 요청 시 Pollinations AI 이미지 URL 1장을 반환한다", async () => {
       const req = createRequest({
         category_id: "hanbok",
         jewelry_type: "ring",
@@ -92,7 +92,7 @@ describe("POST /api/generate", () => {
       expect(res.status).toBe(200);
 
       const data = await res.json();
-      expect(data.images).toHaveLength(2);
+      expect(data.images).toHaveLength(1);
       expect(data.design_id).toMatch(/^pol-/);
       expect(data.prompt_used).toBeDefined();
       // Pollinations.ai URL인지 확인
@@ -111,7 +111,7 @@ describe("POST /api/generate", () => {
       const data = await res.json();
 
       expect(data.prompt_used).toContain("necklace");
-      expect(data.prompt_used).toContain("gold 18k");
+      expect(data.prompt_used).toContain("18K yellow gold");
     });
 
     it("user_prompt가 있으면 프롬프트에 추가된다", async () => {

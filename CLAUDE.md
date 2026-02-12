@@ -66,7 +66,7 @@
 Frontend:  Next.js 16 (App Router) + TypeScript 5 + Tailwind CSS v4 + shadcn/ui
 Backend:   Next.js API Routes
 Database:  Supabase (PostgreSQL + Auth + Storage + Realtime)
-AI:        Replicate API (Flux 1.1 Pro)
+AI:        Google Gemini API (1순위) → Replicate API (2순위) → Pollinations.ai (3순위, 무료 폴백)
 State:     Zustand 5
 i18n:      next-intl v4 (en, ko) — Phase 4에서 ja, zh 추가 예정
 Deploy:    Vercel

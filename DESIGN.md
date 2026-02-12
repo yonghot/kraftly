@@ -230,7 +230,7 @@ text-dark-text text-base
 ├────────────────────────────────────────────────────────────┤
 │                                                            │
 │                    Canvas Area                             │
-│              (생성 이미지 2×2 그리드                         │
+│              (생성 이미지 1장 중앙 표시                       │
 │               또는 Step 1~3 콘텐츠)                         │
 │                bg-dark-bg                                   │
 │                flex-1                                       │
@@ -274,10 +274,10 @@ Tailwind 기본 브레이크포인트 사용:
 
 - Next.js `<Image>` 컴포넌트 사용 (자동 WebP 변환, lazy loading)
 - AI 생성 이미지: Supabase Storage에 저장
-- **플레이스홀더 이미지**: Unsplash 무료 주얼리 사진 사용 (`src/data/images.ts`에서 중앙 관리)
-  - `HERO_IMAGES`: Hero 배경용 (1장)
-  - `CATEGORY_IMAGES`: 카테고리별 대표 이미지 (6장)
-  - `GALLERY_IMAGES`: 갤러리/상세 페이지용 (카테고리당 3장, 총 18장)
+- **플레이스홀더 이미지**: Unsplash 무료 사진 사용 (`src/data/images.ts`에서 중앙 관리, Unsplash `/napi/photos` API로 검증 완료)
+  - `HERO_IMAGES`: Hero 배경용 (1장 — 골드 주얼리)
+  - `CATEGORY_IMAGES`: 카테고리별 대표 이미지 (6장 — 한복, 서울, K-팝, 청자, 자개, 한옥)
+  - `GALLERY_IMAGES`: 갤러리/상세 페이지용 (카테고리당 3장, 총 18장 — 각 카테고리 주제와 일치하는 이미지)
 - 이미지 비율: AI 생성 이미지 1:1, 카테고리 카드 3:4
 - 다크 테마 이미지 카드: `rounded-xl overflow-hidden` + 미묘한 `ring-1 ring-dark-border`
 - `next.config.ts`에 `images.unsplash.com` 도메인 등록
@@ -431,3 +431,4 @@ Tailwind CSS v4 + shadcn/ui 테마 커스터마이징 (`globals.css`):
 | 2026-02-11 | Google Stitch UI 분석 적용 — 다크 테마 팔레트 추가, AI Studio 레이아웃 재설계 (플로팅 프롬프트 바), 표면 계층 시스템 도입, shadcn/ui 확장 계획 (12개 컴포넌트 추가 예정), 애니메이션/트랜지션 가이드 추가, 다크 모드 CSS 토큰 정의 |
 | 2026-02-12 | Stitch 스타일 UI/UX 구현 완료 — globals.css `.dark` 클래스 + M3 Surface Container 토큰 구현, AI Studio 다크 몰입형 워크스페이스 (플로팅 프롬프트 바, 카테고리 그리드, 칩 선택기), Header/Footer Studio 조건부 숨김, 랜딩·갤러리·상세·Auth 페이지 전체 UI 개선, gold-glow 유틸리티 클래스 |
 | 2026-02-12 | Pretendard 폰트 + 실사 이미지 전면 적용 — `--font-sans`를 Pretendard 최우선으로 변경, Unsplash 실사 이미지 전면 도입 (`src/data/images.ts` 중앙 관리), Hero 섹션 실사 배경 이미지 + 오버레이, Gallery/Category/Detail/Studio 모든 카드에 `next/image` 실사 이미지, 로고 폰트 `font-serif` → `tracking-tighter` (Pretendard 기반) |
+| 2026-02-12 | 이미지-카테고리 매칭 + AI 프롬프트 정교화 — 카테고리/갤러리 이미지 전수 검증 (Unsplash API), 불일치 이미지 교체 (마늘→자개, 나선계단→서울 등), AI 생성 1장으로 변경 (2→1), `JEWELRY_TYPE_DETAILS` 5종 형태 묘사 + `MATERIAL_DETAILS` 5종 소재 시각적 묘사 추가, CRITICAL 강제 지시문으로 주얼리 종류·소재 정확도 향상 |

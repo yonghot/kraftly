@@ -34,7 +34,7 @@
 | Styling | Tailwind CSS | v4 (@tailwindcss/postcss) |
 | UI 컴포넌트 | shadcn/ui | 최신 (Sonner 사용, Toast deprecated) |
 | Database | Supabase (PostgreSQL) | Auth + Storage + Realtime 포함 |
-| AI 이미지 생성 | Replicate API | Flux 1.1 Pro |
+| AI 이미지 생성 | Google Gemini API (1순위) → Replicate API (2순위) → Pollinations.ai (3순위) | Gemini 2.0 Flash / Flux 1.1 Pro / 무료 폴백 |
 | 상태 관리 | Zustand | 5.0.11 |
 | 국제화 | next-intl | 4.8.2 (Phase 1: en, ko) |
 | 결제 | Stripe | Phase 2 |
@@ -101,7 +101,7 @@ npm install @supabase/supabase-js @supabase/ssr replicate next-intl zustand
 | material | TEXT | 'silver' \| 'gold_14k' \| 'gold_18k' \| 'rose_gold' \| 'platinum' |
 | user_prompt | TEXT | 사용자 추가 입력 (선택) |
 | full_prompt | TEXT | 최종 AI 프롬프트 |
-| image_urls | TEXT[] | 생성된 이미지 URL 배열 (4장) |
+| image_urls | TEXT[] | 생성된 이미지 URL 배열 (1장) |
 | selected_image_url | TEXT | 사용자가 선택한 이미지 |
 | metadata | JSONB | 추가 파라미터 |
 | is_public | BOOLEAN | 갤러리 공개 여부, 기본값 false |
@@ -158,7 +158,7 @@ npm install @supabase/supabase-js @supabase/ssr replicate next-intl zustand
 #### 6.2 K-Design AI Studio (`/[locale]/studio/page.tsx`) — 킬러 기능
 - **레이아웃**: Google Stitch 스타일 다크 몰입형 워크스페이스 (전체 화면, Header 최소화, Footer 숨김)
 - **미니 헤더**: 뒤로가기 + 로고 + 타이틀 (h-14, 다크 테마)
-- **캔버스 영역**: 6개 카테고리 그리드 → Jewelry Type/Material 칩 선택 → AI 이미지 2x2 그리드 생성 결과
+- **캔버스 영역**: 6개 카테고리 그리드 → Jewelry Type/Material 칩 선택 → AI 이미지 1장 생성 결과
 - **플로팅 프롬프트 바**: 하단 고정, 선택된 옵션 칩 표시 + 프롬프트 입력 + Generate 버튼
 - 이미지 선택 후: gold-glow 하이라이트 + Regenerate, Share to Gallery, Find Artisan(Phase 2) 버튼
 - **로딩 UX**: 스켈레톤 UI + "AI is crafting your K-Design..." + 프로그레스 바 (10~30초)
@@ -195,7 +195,9 @@ npm install @supabase/supabase-js @supabase/ssr replicate next-intl zustand
 
 **POST /api/generate** — AI 이미지 생성
 - Request: `{ category_id, jewelry_type, material, user_prompt? }`
-- 로직: 카테고리 prompt_template 조회 → 플레이스홀더 치환 → user_prompt 추가 → Replicate API 호출(num_outputs: 4) → Supabase Storage 업로드 → designs 레코드 생성
+- 로직: 카테고리 prompt_template 조회 → 플레이스홀더 치환 → 주얼리 형태/소재 상세 묘사 보강 → user_prompt 추가 → AI API 호출(1장 생성) → 응답
+- AI 우선순위: (1) Gemini API (`GEMINI_API_KEY`) → (2) Replicate API (`REPLICATE_API_TOKEN`) → (3) Pollinations.ai (키 불필요, 무료 폴백)
+- 프롬프트 보강: `JEWELRY_TYPE_DETAILS` (5종 형태 묘사) + `MATERIAL_DETAILS` (5종 소재 시각적 묘사) + CRITICAL 강제 지시문
 - Response: `{ images: string[], design_id: string, prompt_used: string }`
 - Replicate 파라미터: guidance_scale 7.5, num_inference_steps 30
 
@@ -254,7 +256,9 @@ npm install @supabase/supabase-js @supabase/ssr replicate next-intl zustand
 NEXT_PUBLIC_SUPABASE_URL=
 NEXT_PUBLIC_SUPABASE_ANON_KEY=
 SUPABASE_SERVICE_ROLE_KEY=
+GEMINI_API_KEY=
 REPLICATE_API_TOKEN=
+TOGETHER_API_KEY=
 NEXT_PUBLIC_APP_URL=https://kraftly.co
 NEXT_PUBLIC_DEFAULT_LOCALE=en
 
