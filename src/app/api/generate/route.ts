@@ -91,6 +91,7 @@ export async function POST(request: NextRequest) {
 
     const results = await Promise.allSettled(imagePromises);
     const images: string[] = [];
+    const errors: string[] = [];
 
     for (const result of results) {
       if (result.status === "fulfilled" && result.value.candidates?.[0]) {
@@ -102,12 +103,20 @@ export async function POST(request: NextRequest) {
             );
           }
         }
+      } else if (result.status === "rejected") {
+        const errMsg = result.reason?.message || String(result.reason);
+        console.error("Gemini API rejected:", errMsg);
+        errors.push(errMsg);
       }
     }
 
     if (images.length === 0) {
+      const detail = errors.length > 0
+        ? errors[0]
+        : "응답에 이미지 데이터가 없습니다.";
+      console.error("Image generation failed. Errors:", errors);
       return NextResponse.json(
-        { error: "이미지 생성에 실패했습니다. 잠시 후 다시 시도해주세요." },
+        { error: "이미지 생성에 실패했습니다.", detail },
         { status: 502 }
       );
     }
@@ -118,9 +127,10 @@ export async function POST(request: NextRequest) {
       prompt_used: fullPrompt,
     });
   } catch (error) {
-    console.error("Generation error:", error);
+    const errMsg = error instanceof Error ? error.message : String(error);
+    console.error("Generation error:", errMsg);
     return NextResponse.json(
-      { error: "이미지 생성 중 오류가 발생했습니다." },
+      { error: "이미지 생성 중 오류가 발생했습니다.", detail: errMsg },
       { status: 500 }
     );
   }

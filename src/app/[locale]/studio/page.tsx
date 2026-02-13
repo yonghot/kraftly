@@ -23,6 +23,7 @@ import { useLocale } from "next-intl";
 import type { JewelryType, Material } from "@/types";
 import { useArtisanStore } from "@/stores/artisan-store";
 import { cn } from "@/lib/utils";
+import { toast } from "sonner";
 
 const JEWELRY_TYPES: { value: JewelryType; labelKey: string }[] = [
   { value: "ring", labelKey: "ring" },
@@ -99,9 +100,13 @@ export default function StudioPage() {
         }),
       });
 
-      if (!res.ok) throw new Error("Generation failed");
-
       const data = await res.json();
+
+      if (!res.ok) {
+        const detail = data?.detail || data?.error || "Generation failed";
+        throw new Error(detail);
+      }
+
       setProgress(100);
       setImageLoaded(new Array(data.images.length).fill(false));
       setGeneratedImages(data.images);
@@ -109,7 +114,9 @@ export default function StudioPage() {
       setTimeout(() => {
         resultsRef.current?.scrollIntoView({ behavior: "smooth" });
       }, 300);
-    } catch {
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Generation failed";
+      toast.error(message);
       setProgress(100);
       setGeneratedImages([]);
     } finally {
