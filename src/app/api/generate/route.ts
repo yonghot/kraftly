@@ -23,6 +23,31 @@ const MATERIAL_DETAILS: Record<Material, string> = {
   platinum: "platinum — dense silvery-white metal with cool blue-gray undertone, heavy premium weight visible, understated matte satin finish, hypoallergenic luxury",
 };
 
+/** Gemini API 에러에서 사용자 친화적 메시지 추출 */
+function parseGeminiError(raw: string): string {
+  try {
+    const parsed = JSON.parse(raw);
+    const code = parsed?.error?.code;
+    const status = parsed?.error?.status;
+
+    if (code === 429 || status === "RESOURCE_EXHAUSTED") {
+      return "API 할당량이 초과되었습니다. Google AI Studio에서 유료 플랜을 확인해주세요.";
+    }
+    if (code === 403) {
+      return "API 키 권한이 부족합니다. Google AI Studio에서 키 설정을 확인해주세요.";
+    }
+    if (code === 400) {
+      return "잘못된 요청입니다. 프롬프트를 수정해주세요.";
+    }
+    return parsed?.error?.message || raw;
+  } catch {
+    if (raw.includes("quota") || raw.includes("RESOURCE_EXHAUSTED")) {
+      return "API 할당량이 초과되었습니다. Google AI Studio에서 유료 플랜을 확인해주세요.";
+    }
+    return raw;
+  }
+}
+
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
@@ -111,9 +136,10 @@ export async function POST(request: NextRequest) {
     }
 
     if (images.length === 0) {
-      const detail = errors.length > 0
+      const rawDetail = errors.length > 0
         ? errors[0]
         : "응답에 이미지 데이터가 없습니다.";
+      const detail = parseGeminiError(rawDetail);
       console.error("Image generation failed. Errors:", errors);
       return NextResponse.json(
         { error: "이미지 생성에 실패했습니다.", detail },
