@@ -143,9 +143,13 @@ DESIGN.md 기준으로 전체 UI/UX를 프리미엄 수준으로 대폭 개선. 
 - 404: Search 아이콘 + "Back to Home"
 - 빈 상태: 아이콘(h-20 w-20 rounded-3xl) + 설명 + CTA 패턴
 
-### 빌드 결과
+### 빌드 및 배포
 - `npm run build` ✅ 성공 (TypeScript 에러 없음)
-- 정적 페이지 5개 생성, 동적 페이지 11개
+- 정적 페이지 5개, 동적 페이지 11개
+- **배포** (2026-03-11): Vercel 프로덕션 배포 완료
+  - 커밋: `65f92bd` — `feat: UI/UX 프리미엄 업그레이드`
+  - 빌드 시간: 55초
+  - 프로덕션 URL: https://kraftly-ashen.vercel.app
 
 ---
 
