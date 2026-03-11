@@ -24,6 +24,7 @@ import type { JewelryType, Material } from "@/types";
 import { useArtisanStore } from "@/stores/artisan-store";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
+import { motion, AnimatePresence } from "framer-motion";
 
 const JEWELRY_TYPES: { value: JewelryType; labelKey: string }[] = [
   { value: "ring", labelKey: "ring" },
@@ -162,7 +163,12 @@ export default function StudioPage() {
       <div className="flex-1 overflow-y-auto">
         <div className="mx-auto max-w-4xl px-4 py-6 md:px-8 md:py-10">
           {/* 카테고리 선택 */}
-          <section className="mb-8">
+          <motion.section
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="mb-8"
+          >
             <h2 className="mb-4 text-sm font-medium text-dark-text-muted">
               {t("step1")}
             </h2>
@@ -217,11 +223,18 @@ export default function StudioPage() {
                 );
               })}
             </div>
-          </section>
+          </motion.section>
 
           {/* 디자인 옵션 (카테고리 선택 후 표시) */}
+          <AnimatePresence>
           {selectedCategory && (
-            <section className="mb-8 animate-in fade-in slide-in-from-bottom-2 duration-300">
+            <motion.section
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.35 }}
+              className="mb-8"
+            >
               <h2 className="mb-4 text-sm font-medium text-dark-text-muted">
                 {t("step2")}
               </h2>
@@ -273,12 +286,21 @@ export default function StudioPage() {
                   </div>
                 </div>
               </div>
-            </section>
+            </motion.section>
           )}
+          </AnimatePresence>
 
           {/* 생성 결과 */}
+          <AnimatePresence>
           {(generatedImages.length > 0 || isGenerating) && (
-            <section ref={resultsRef} className="mb-8 animate-in fade-in duration-300">
+            <motion.section
+              ref={resultsRef}
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.4 }}
+              className="mb-8"
+            >
               <h2 className="mb-4 text-sm font-medium text-dark-text-muted">
                 {t("step3")}
               </h2>
@@ -357,8 +379,15 @@ export default function StudioPage() {
               </div>
 
               {/* 선택 후 액션 */}
+              <AnimatePresence>
               {selectedImageIndex !== null && (
-                <div className="mt-5 flex flex-wrap justify-center gap-2">
+                <motion.div
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="mt-5 flex flex-wrap justify-center gap-2"
+                >
                   <Button
                     variant="outline"
                     size="sm"
@@ -384,10 +413,12 @@ export default function StudioPage() {
                     designImageUrl={generatedImages[0] || null}
                     label={t("findArtisan")}
                   />
-                </div>
+                </motion.div>
               )}
-            </section>
+              </AnimatePresence>
+            </motion.section>
           )}
+          </AnimatePresence>
         </div>
       </div>
 

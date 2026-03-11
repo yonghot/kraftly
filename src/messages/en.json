@@ -33,7 +33,10 @@
     "viewAll": "View All Designs",
     "forArtisans": "Are you a Korean jewelry artisan?",
     "artisanBenefits": "Connect with global customers, earn fair commissions, and communicate effortlessly with auto-translation.",
-    "joinArtisan": "Join as Artisan"
+    "joinArtisan": "Join as Artisan",
+    "statUsers": "Active Designers",
+    "statDesigns": "Designs Created",
+    "statRating": "Average Rating"
   },
   "studio": {
     "title": "K-Design AI Studio",

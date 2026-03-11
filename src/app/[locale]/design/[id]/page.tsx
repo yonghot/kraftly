@@ -27,19 +27,19 @@ export default async function DesignDetailPage({
   const imageUrl = categoryImages[imageIdx] ?? null;
 
   return (
-    <div className="mx-auto max-w-4xl px-4 py-10 md:px-8 md:py-14">
+    <div className="mx-auto max-w-5xl px-4 py-14 md:px-8 md:py-20">
       {/* 뒤로 가기 */}
       <Link
         href="/gallery"
-        className="mb-8 inline-flex items-center gap-2 rounded-lg px-2 py-1 text-sm text-muted-foreground transition-colors hover:bg-muted/50 hover:text-foreground"
+        className="mb-10 inline-flex items-center gap-2 rounded-lg px-3 py-1.5 text-sm text-muted-foreground transition-colors hover:bg-muted/50 hover:text-foreground"
       >
         <ArrowLeft className="h-4 w-4" />
         Gallery
       </Link>
 
-      <div className="grid gap-10 md:grid-cols-2">
+      <div className="grid gap-12 md:grid-cols-2">
         {/* 이미지 */}
-        <div className="relative aspect-square overflow-hidden rounded-2xl border border-warm-border/40">
+        <div className="relative aspect-square overflow-hidden rounded-2xl border border-warm-border/40 shadow-lg">
           {imageUrl ? (
             <Image
               src={imageUrl}
@@ -60,9 +60,9 @@ export default async function DesignDetailPage({
         </div>
 
         {/* 정보 */}
-        <div>
+        <div className="flex flex-col justify-center">
           <Badge
-            className="mb-5 rounded-md text-xs font-medium"
+            className="mb-5 w-fit rounded-md text-xs font-medium"
             style={{
               backgroundColor: category.color_palette[0] + "12",
               color: category.color_palette[0],
@@ -71,17 +71,17 @@ export default async function DesignDetailPage({
             {category.name_en}
           </Badge>
 
-          <h1 className="text-2xl font-bold tracking-tight text-navy">
+          <h1 className="font-serif text-3xl font-bold tracking-tight text-navy md:text-4xl">
             {category.name_en} Design
           </h1>
 
-          <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+          <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
             {category.description_en}
           </p>
 
-          <Separator className="my-6 bg-warm-border/40" />
+          <Separator className="my-8 bg-warm-border/40" />
 
-          <div className="space-y-3 text-sm">
+          <div className="space-y-4 text-sm">
             <div className="flex justify-between">
               <span className="text-muted-foreground">Category</span>
               <span className="font-medium text-foreground">{category.name_en}</span>
@@ -100,14 +100,14 @@ export default async function DesignDetailPage({
             </div>
           </div>
 
-          <Separator className="my-6 bg-warm-border/40" />
+          <Separator className="my-8 bg-warm-border/40" />
 
           {/* 액션 버튼 */}
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-3">
             <Button
               variant="outline"
               size="sm"
-              className="rounded-lg border-warm-border"
+              className="rounded-xl border-warm-border px-5 transition-all hover:border-gold/30 hover:shadow-sm"
             >
               <Heart className="mr-1.5 h-3.5 w-3.5" />
               Like
@@ -115,7 +115,7 @@ export default async function DesignDetailPage({
             <Button
               variant="outline"
               size="sm"
-              className="rounded-lg border-warm-border"
+              className="rounded-xl border-warm-border px-5 transition-all hover:border-gold/30 hover:shadow-sm"
             >
               <Share2 className="mr-1.5 h-3.5 w-3.5" />
               Share

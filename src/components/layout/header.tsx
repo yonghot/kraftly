@@ -13,6 +13,7 @@ import { useRouter } from "@/i18n/navigation";
 import { useLocale } from "next-intl";
 import { Menu, Globe, Sparkles, X } from "lucide-react";
 import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
 export function Header() {
   const t = useTranslations("common");
@@ -37,11 +38,11 @@ export function Header() {
   ];
 
   return (
-    <header className="sticky top-0 z-50 border-b border-warm-border/60 bg-white/70 backdrop-blur-xl">
+    <header className="sticky top-0 z-50 border-b border-warm-border/60 bg-white/80 backdrop-blur-xl">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 md:px-8">
         {/* 로고 */}
-        <Link href="/" className="flex items-center gap-2.5">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-gold to-gold/80">
+        <Link href="/" className="group flex items-center gap-2.5">
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-gold to-gold/80 shadow-sm transition-shadow group-hover:shadow-md group-hover:shadow-gold/20">
             <Sparkles className="h-4 w-4 text-white" />
           </div>
           <span className="text-xl font-bold tracking-tighter text-navy">
@@ -57,13 +58,20 @@ export function Header() {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
+                className={`relative rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
                   isActive
-                    ? "bg-gold/10 text-gold"
+                    ? "text-gold"
                     : "text-muted-foreground hover:bg-muted/50 hover:text-foreground"
                 }`}
               >
                 {item.label}
+                {isActive && (
+                  <motion.div
+                    layoutId="nav-indicator"
+                    className="absolute inset-x-2 -bottom-[17px] h-[2px] rounded-full bg-gold"
+                    transition={{ type: "spring", stiffness: 500, damping: 35 }}
+                  />
+                )}
               </Link>
             );
           })}
@@ -106,7 +114,7 @@ export function Header() {
             <Button
               variant="outline"
               size="sm"
-              className="rounded-lg border-warm-border text-sm"
+              className="rounded-lg border-warm-border text-sm transition-all hover:border-gold/30 hover:shadow-sm"
             >
               {t("login")}
             </Button>
@@ -129,36 +137,44 @@ export function Header() {
       </div>
 
       {/* 모바일 메뉴 */}
-      {mobileMenuOpen && (
-        <div className="animate-in slide-in-from-top-2 border-t border-warm-border/60 bg-white/95 backdrop-blur-xl md:hidden">
-          <nav className="flex flex-col p-4">
-            {navItems.map((item) => {
-              const isActive = pathname === item.href;
-              return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className={`rounded-lg px-4 py-3 text-sm font-medium transition-colors ${
-                    isActive
-                      ? "bg-gold/10 text-gold"
-                      : "text-muted-foreground hover:bg-muted/50"
-                  }`}
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  {item.label}
-                </Link>
-              );
-            })}
-            <Link
-              href="/auth/login"
-              className="rounded-lg px-4 py-3 text-sm font-medium text-muted-foreground hover:bg-muted/50"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              {t("login")}
-            </Link>
-          </nav>
-        </div>
-      )}
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.25 }}
+            className="overflow-hidden border-t border-warm-border/60 bg-white/95 backdrop-blur-xl md:hidden"
+          >
+            <nav className="flex flex-col p-4">
+              {navItems.map((item) => {
+                const isActive = pathname === item.href;
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className={`rounded-lg px-4 py-3 text-sm font-medium transition-colors ${
+                      isActive
+                        ? "bg-gold/10 text-gold"
+                        : "text-muted-foreground hover:bg-muted/50"
+                    }`}
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    {item.label}
+                  </Link>
+                );
+              })}
+              <Link
+                href="/auth/login"
+                className="rounded-lg px-4 py-3 text-sm font-medium text-muted-foreground hover:bg-muted/50"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                {t("login")}
+              </Link>
+            </nav>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </header>
   );
 }

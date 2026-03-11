@@ -28,7 +28,7 @@ export function DesignCard({ design }: DesignCardProps) {
   return (
     <Link
       href={`/design/${design.id}`}
-      className="group block overflow-hidden rounded-2xl bg-card shadow-sm transition-shadow hover:shadow-md"
+      className="group block overflow-hidden rounded-2xl border border-warm-border/40 bg-card transition-all duration-300 hover:-translate-y-1 hover:border-gold/20 hover:shadow-xl hover:shadow-gold/5"
     >
       {/* 이미지 */}
       <div className="relative aspect-square overflow-hidden bg-muted">
@@ -36,7 +36,7 @@ export function DesignCard({ design }: DesignCardProps) {
           <img
             src={displayImage}
             alt={`${categoryName} ${design.jewelry_type}`}
-            className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
           />
         ) : (
           <div className="flex h-full items-center justify-center text-muted-foreground">
@@ -46,19 +46,18 @@ export function DesignCard({ design }: DesignCardProps) {
       </div>
 
       {/* 카드 하단 정보 */}
-      <div className="p-3">
+      <div className="p-3.5">
         <div className="flex items-center justify-between">
           <Badge
             variant="secondary"
-            className="text-xs"
+            className="rounded-md bg-transparent px-0 text-[11px] font-medium"
             style={{
-              backgroundColor: category?.color_palette[0] + "20",
               color: category?.color_palette[0],
             }}
           >
             {categoryName}
           </Badge>
-          <div className="flex items-center gap-1 text-xs text-muted-foreground">
+          <div className="flex items-center gap-1 text-[11px] text-muted-foreground/60">
             <Heart className="h-3 w-3" />
             <span>{design.likes_count}</span>
           </div>

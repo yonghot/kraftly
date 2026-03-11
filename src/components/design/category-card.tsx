@@ -32,7 +32,7 @@ export function CategoryCard({
         "group relative flex aspect-[3/4] w-full min-w-[160px] flex-col justify-end overflow-hidden rounded-2xl border-2 transition-all duration-300",
         selected
           ? "border-gold shadow-lg shadow-gold/20"
-          : "border-transparent shadow-sm hover:shadow-md"
+          : "border-transparent shadow-md hover:-translate-y-1 hover:shadow-xl hover:shadow-gold/5"
       )}
     >
       {/* 배경 이미지 */}
@@ -54,10 +54,10 @@ export function CategoryCard({
       )}
 
       {/* 하단 그라데이션 오버레이 + 텍스트 */}
-      <div className="relative z-10 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-4 pt-20">
+      <div className="relative z-10 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-5 pt-20">
         <h3 className="text-sm font-bold text-white">{name}</h3>
         {showDescription && description && (
-          <p className="mt-1 line-clamp-2 text-xs text-white/80">
+          <p className="mt-1.5 line-clamp-2 text-xs leading-relaxed text-white/80">
             {description}
           </p>
         )}
@@ -65,7 +65,7 @@ export function CategoryCard({
 
       {/* 선택 표시 */}
       {selected && (
-        <div className="absolute right-3 top-3 flex h-6 w-6 items-center justify-center rounded-full bg-gold text-xs text-white">
+        <div className="absolute right-3 top-3 flex h-6 w-6 items-center justify-center rounded-full bg-gold text-xs text-white shadow-md">
           ✓
         </div>
       )}
